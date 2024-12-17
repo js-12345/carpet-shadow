@@ -6,8 +6,8 @@ import com.carpet_shadow.interfaces.ShadowItem;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.Nullable;
@@ -25,8 +25,8 @@ public abstract class ItemStackMixin {
     private void postToolTip(@Nullable PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         List<Text> list = cir.getReturnValue();
         if (CarpetShadowSettings.shadowItemTooltip && ((ShadowItem) this).carpet_shadow$getClientShadowId() != null) {
-            MutableText text = MutableText.of(new LiteralTextContent("shadow_id: "));
-            MutableText sub = MutableText.of(new LiteralTextContent(((ShadowItem) this).carpet_shadow$getClientShadowId()));
+            MutableText text = MutableText.of(new PlainTextContent.Literal("shadow_id: "));
+            MutableText sub = MutableText.of(new PlainTextContent.Literal(((ShadowItem) this).carpet_shadow$getClientShadowId()));
             sub.formatted(Formatting.GOLD, Formatting.BOLD);
             text.append(sub);
             text.formatted(Formatting.ITALIC);

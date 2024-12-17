@@ -10,8 +10,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
+import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,8 +26,8 @@ public abstract class PacketByteBufMixin {
         NbtCompound ret = original.call(instance);
         NbtCompound display = new NbtCompound();
         if (CarpetShadowSettings.shadowItemTooltip && ((ShadowItem) (Object) instance).carpet_shadow$getClientShadowId() != null) {
-            MutableText text = MutableText.of(new LiteralTextContent("shadow_id: "));
-            MutableText sub = MutableText.of(new LiteralTextContent(((ShadowItem) (Object) instance).carpet_shadow$getClientShadowId()));
+            MutableText text = MutableText.of(new PlainTextContent.Literal("shadow_id: "));
+            MutableText sub = MutableText.of(new PlainTextContent.Literal(((ShadowItem) (Object) instance).carpet_shadow$getClientShadowId()));
             sub.formatted(Formatting.GOLD, Formatting.BOLD);
             text.append(sub);
             text.formatted(Formatting.ITALIC);
@@ -40,7 +40,7 @@ public abstract class PacketByteBufMixin {
                     list = ret.getList(ItemStack.LORE_KEY, 8);
                 }
             }
-            list.add(NbtString.of(Text.Serializer.toJson(text)));
+            list.add(NbtString.of(Text.Serialization.toJsonString(text)));
             display.put(ItemStack.LORE_KEY, list);
             ret.put(ItemStack.DISPLAY_KEY, display);
             ret.putString(ShadowItem.SHADOW_KEY,((ShadowItem) (Object) instance).carpet_shadow$getClientShadowId());
@@ -66,11 +66,11 @@ public abstract class PacketByteBufMixin {
                 for (int i = 0; i < lore.size(); ++i) {
                     string = lore.getString(i);
                     try {
-                        mutableText2 = Text.Serializer.fromJson(string);
-                        if (mutableText2 != null && mutableText2.getContent() instanceof LiteralTextContent && ((LiteralTextContent)mutableText2.getContent()).string().equals("shadow_id: ")) {
+                        mutableText2 = Text.Serialization.fromJson(string);
+                        if (mutableText2 != null && mutableText2.getContent() instanceof PlainTextContent.Literal && ((PlainTextContent.Literal)mutableText2.getContent()).string().equals("shadow_id: ")) {
                             lore.remove(i);
                             if(((ShadowItem) (Object) stack).carpet_shadow$getClientShadowId() == null)
-                                ((ShadowItem) (Object) stack).carpet_shadow$setClientShadowId(((LiteralTextContent)mutableText2.getSiblings().get(0).getContent()).string());
+                                ((ShadowItem) (Object) stack).carpet_shadow$setClientShadowId(((PlainTextContent.Literal)mutableText2.getSiblings().get(0).getContent()).string());
                             break;
                         }
                     } catch (JsonParseException ignored) {
