@@ -24,6 +24,7 @@ public abstract class ItemEntityMixin {
     @WrapOperation(method = "merge(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/item/ItemStack;", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;copyWithCount(I)Lnet/minecraft/item/ItemStack;"))
     private static ItemStack redirect_copy(ItemStack stack, int count, Operation<ItemStack> original) {
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
+            stack.increment(count - stack.getCount());
             return stack;
         }
         return original.call(stack, count);
