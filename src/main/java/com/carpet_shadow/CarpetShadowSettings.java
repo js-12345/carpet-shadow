@@ -31,6 +31,8 @@ public class CarpetShadowSettings {
     public static boolean shadowItemPreventCombine = false;
     @Rule( categories = {SHADOW, OPTIMIZATION, FEATURE})
     public static boolean shadowItemUseFix = false;
+    @Rule( categories = {SHADOW, FEATURE})
+    public static boolean shadowItemDropFix = false;
 
     private static class IdSizeValidator extends Validator<Integer> {
         @Override

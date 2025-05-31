@@ -11,6 +11,7 @@
   "carpet.rule.shadowItemIdSize.desc": "Shadow Items Id Length",
   "carpet.rule.shadowSuppressionGeneration.desc": "Reintroduce pre 1.19 shadow item generation by update suppression",
   "carpet.rule.shadowSuppressionGeneration.extra.0": "DISCLAIMER: this will not reintroduce old update suppression",
+  "carpet.rule.shadowItemDropFix.desc": "Fixing item dropping",
   "carpet.rule.shadowCraftingGeneration.desc": "Introduce a crafting recipe to create new Shadow Items",
   "carpet.rule.shadowCraftingGeneration.extra.0": "combine any item stack and a EnderChest to generate a new shadow stack",
   "carpet.rule.shadowCraftingGeneration.extra.1": "the operation will consume 1 item from each component",
