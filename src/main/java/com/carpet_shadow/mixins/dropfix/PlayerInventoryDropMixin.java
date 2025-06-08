@@ -17,7 +17,7 @@ public class PlayerInventoryDropMixin {
     @ModifyReturnValue(method = "canStackAddMore(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z", at = @At("RETURN"))
     public boolean canStackAddMore(boolean original, ItemStack existingStack, ItemStack stack) {
         if (CarpetShadowSettings.shadowItemDropFix) {
-            if (((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
+            if (original && ((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
                 CarpetShadow.LOGGER.warn("prevent inventory combine");
                 return false;
             }
