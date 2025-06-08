@@ -5,21 +5,59 @@ import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.ItemEntitySlot;
 import com.carpet_shadow.interfaces.ShadowItem;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+import java.util.UUID;
+
 @Mixin(ItemEntity.class)
 public abstract class ItemEntityMixin {
+
+    @Shadow
+    @Nullable
+    private UUID owner;
+
+    @Shadow
+    private static void merge(ItemEntity targetEntity, ItemStack targetStack, ItemEntity sourceEntity, ItemStack sourceStack) {}
+
+    @WrapMethod(method = "tryMerge(Lnet/minecraft/entity/ItemEntity;)V")
+    public void fix_tryMerge(ItemEntity other, Operation<Void> original) {
+        if (CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) {
+            ItemEntity iThis = (ItemEntity) ((Object) this);
+
+            ItemStack itemStack = iThis.getStack();
+            ItemStack itemStack2 = other.getStack();
+
+            if (Objects.equals(owner, owner) && ItemEntity.canMerge(itemStack, itemStack2)) {
+                String shadId1 = ((ShadowItem) (Object) itemStack).carpet_shadow$getShadowId();
+                String shadId2 = ((ShadowItem) (Object) itemStack2).carpet_shadow$getShadowId();
+
+                if (shadId1 != null) {
+                    if (shadId2 == null) {
+                        merge(iThis, itemStack, other, itemStack2);
+                        return;
+                    }
+                } else if (shadId2 != null) {
+                    merge(other, itemStack2, iThis, itemStack);
+                    return;
+                }
+            }
+        }
+
+        original.call(other);
+    }
 
     @WrapOperation(method = "merge(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;I)Lnet/minecraft/item/ItemStack;", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;copyWithCount(I)Lnet/minecraft/item/ItemStack;"))
     private static ItemStack redirect_copy(ItemStack stack, int count, Operation<ItemStack> original) {

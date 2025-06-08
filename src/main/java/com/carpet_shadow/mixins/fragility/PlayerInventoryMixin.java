@@ -27,7 +27,7 @@ public abstract class PlayerInventoryMixin {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setBobbingAnimationTime(I)V"))
     )
     private ItemStack copy_damaged_item(ItemStack instance, Operation<ItemStack> original) {
-        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ((ShadowItem) (Object) instance).carpet_shadow$getShadowId() != null) {
+        if ((CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ((ShadowItem) (Object) instance).carpet_shadow$getShadowId() != null) {
             ItemEntity entity = ((ItemEntitySlot) (Object) instance).carpet_shadow$getEntity();
             if (entity != null)
                 entity.discard();
@@ -37,9 +37,12 @@ public abstract class PlayerInventoryMixin {
         return original.call(instance);
     }
 
-    @WrapOperation(method = "insertStack(ILnet/minecraft/item/ItemStack;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setCount(I)V"), slice = @Slice(from = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;creativeMode:Z")))
+    @WrapOperation(method = "insertStack(ILnet/minecraft/item/ItemStack;)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;setCount(I)V"),
+            slice = @Slice(
+                    from = @At(value = "FIELD", target = "Lnet/minecraft/entity/player/PlayerAbilities;creativeMode:Z")))
     private void modify_count(ItemStack instance, int count, Operation<Void> original) {
-        if (count == 0 && CarpetShadowSettings.shadowItemInventoryFragilityFix && ((ShadowItem) (Object) instance).carpet_shadow$getShadowId() != null) {
+        if (count == 0 && (CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ((ShadowItem) (Object) instance).carpet_shadow$getShadowId() != null) {
             ItemEntity entity = ((ItemEntitySlot) (Object) instance).carpet_shadow$getEntity();
             if (entity != null)
                 entity.discard();
@@ -52,7 +55,7 @@ public abstract class PlayerInventoryMixin {
 
     @Inject(method = "addStack(ILnet/minecraft/item/ItemStack;)I", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;setStack(ILnet/minecraft/item/ItemStack;)V"), cancellable = true)
     public void add_shadow_item(int slot, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
-        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
+        if ((CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
             this.setStack(slot, stack);
             ItemEntity entity = ((ItemEntitySlot) (Object) stack).carpet_shadow$getEntity();
             if (entity != null) {
