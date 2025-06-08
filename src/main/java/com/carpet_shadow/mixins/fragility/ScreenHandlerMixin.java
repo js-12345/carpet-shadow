@@ -24,6 +24,9 @@ public abstract class ScreenHandlerMixin {
     @Shadow
     public abstract ItemStack getCursorStack();
 
+    // TODO: deletion while stack on cursor -> clicking on non shadow stack
+    // TODO: click item dragging not working
+
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"))
     public void merging_start(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci){
         Globals.mergingThreads.add(Thread.currentThread());
