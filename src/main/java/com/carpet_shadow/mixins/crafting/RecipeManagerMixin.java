@@ -28,89 +28,99 @@ import java.util.Map;
 public class RecipeManagerMixin {
 
     @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V",
-            at = @At(value = "FIELD", target = "Lnet/minecraft/recipe/RecipeManager;recipes:Ljava/util/Map;"))
-         //   at = @At(value = "FIELD", target = "Lnet/minecraft/recipe/RecipeManager;builder:Lcom/google/common/collect/ImmutableMap$Builder;"))
-    //at = @At(value = "HEAD", shift = At.Shift.BY, by = 3))
-    private void addShadowRecipe(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci, @Local(ordinal = 1) Map<RecipeType<?>, ImmutableMap.Builder<Identifier, RecipeEntry<?>>> map2, @Local ImmutableMap.Builder<Identifier, RecipeEntry<?>> builder) {
+            at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;", ordinal = 0, shift = At.Shift.BEFORE))
+    private void addShadowRecipe(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci,
+                                 @Local(ordinal = 1) Map<RecipeType<?>, ImmutableMap.Builder<Identifier, RecipeEntry<?>>> map2, @Local ImmutableMap.Builder<Identifier, Recipe<?>> builder) {
         Identifier identifier = new Identifier("carpet_shadow", "shadow_recipe");
         Recipe<?> recipe = new BookCloningRecipe(CraftingRecipeCategory.MISC) {
             @Override
             public boolean matches(RecipeInputInventory inventory, World world) {
-                System.out.println("Matches");
                 if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK || !CarpetShadowSettings.shadowCraftingGeneration)
                     return false;
-                boolean enderchest = false;
-                int count = 0;
+
+                boolean hasEnderchest = false;
+                int itemCount = 0;
                 for (int i = 0; i < inventory.size(); ++i) {
-                    ItemStack itemStack2 = inventory.getStack(i);
-                    if (!itemStack2.isEmpty()) {
-                        if (itemStack2.getItem().equals(Items.ENDER_CHEST))
-                            enderchest = true;
-                        count++;
+                    ItemStack itemStack = inventory.getStack(i);
+                    if (!itemStack.isEmpty()) {
+                        if (itemStack.getItem().equals(Items.ENDER_CHEST))
+                            hasEnderchest = true;
+                        itemCount++;
                     }
                 }
-                return enderchest && count == 2;
+
+                return hasEnderchest && itemCount == 2;
             }
 
             @Override
             public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
-                System.out.println("craft");
                 if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK || !CarpetShadowSettings.shadowCraftingGeneration)
                     return ItemStack.EMPTY;
-                ItemStack item = null;
+
+                ItemStack itemToShadow = null;
                 ItemStack enderchest = null;
                 for (int i = 0; i < inventory.size(); ++i) {
-                    ItemStack itemStack2 = inventory.getStack(i);
-                    if (!itemStack2.isEmpty()) {
-                        if (itemStack2.getItem().equals(Items.ENDER_CHEST)) {
+                    ItemStack itemStack = inventory.getStack(i);
+                    if (!itemStack.isEmpty()) {
+                        if (itemStack.getItem().equals(Items.ENDER_CHEST)) {
                             if (enderchest != null)
-                                item = enderchest;
-                            enderchest = itemStack2;
-                        } else
-                            item = itemStack2;
+                                itemToShadow = enderchest;
+                            enderchest = itemStack;
+                        } else {
+                            itemToShadow = itemStack;
+                        }
                     }
                 }
-                if (item == null || enderchest == null)
+
+                if (itemToShadow == null || enderchest == null)
                     return ItemStack.EMPTY;
-                String id = ((ShadowItem) (Object) item).carpet_shadow$getShadowId();
+
+                String id = ((ShadowItem) (Object) itemToShadow).carpet_shadow$getShadowId();
                 if (id == null) {
                     id = CarpetShadow.shadow_id_generator.nextString();
                 }
-                return Globals.getByIdOrAdd(id, item);
+
+                return Globals.getByIdOrAdd(id, itemToShadow);
             }
 
             @Override
             public DefaultedList<ItemStack> getRemainder(RecipeInputInventory inventory) {
-                System.out.println("getRemainder");
-                ItemStack item = null;
+                ItemStack itemToShadow = null;
                 ItemStack enderchest = null;
                 for (int i = 0; i < inventory.size(); ++i) {
-                    ItemStack itemStack2 = inventory.getStack(i);
-                    if (!itemStack2.isEmpty()) {
-                        if (itemStack2.getItem().equals(Items.ENDER_CHEST)) {
+                    ItemStack itemStack = inventory.getStack(i);
+                    if (!itemStack.isEmpty()) {
+                        if (itemStack.getItem().equals(Items.ENDER_CHEST)) {
                             if (enderchest != null)
-                                item = enderchest;
-                            enderchest = itemStack2;
-                        } else
-                            item = itemStack2;
+                                itemToShadow = enderchest;
+                            enderchest = itemStack;
+                        } else {
+                            itemToShadow = itemStack;
+                        }
                     }
                 }
-                if (item != null && enderchest != null)
-                    item.setCount(item.getCount() + 1);
+
+                if (itemToShadow != null && enderchest != null) {
+                    itemToShadow.setCount(itemToShadow.getCount() + 1);
+                    enderchest.setCount(enderchest.getCount() + 1);
+                }
+
                 return super.getRemainder(inventory);
             }
 
+
             @Override
             public boolean fits(int width, int height) {
-                System.out.println("fits");
-                if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK || !CarpetShadowSettings.shadowCraftingGeneration)
-                    return false;
                 return width * height >= 2;
             }
+
+            @Override
+            public boolean showNotification() {
+                return false;
+            }
         };
-        System.out.println(map2.size());
-        ((ImmutableMap.Builder) map2.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder())).put(identifier, recipe);
-        builder.put(identifier, new RecipeEntry<>(identifier, recipe));
-        System.out.println(map2.size());
+        RecipeEntry<?> recipeEntry = new RecipeEntry<>(identifier, recipe);
+        map2.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder()).put(identifier, recipeEntry);
+        builder.put(identifier, recipe);
     }
 }
