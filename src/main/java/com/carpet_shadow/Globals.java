@@ -1,15 +1,10 @@
 package com.carpet_shadow;
 
 import com.carpet_shadow.interfaces.ShadowItem;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
-import com.sun.jna.platform.win32.WinDef;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class Globals {
@@ -25,9 +20,11 @@ public class Globals {
     }
 
     public static ItemStack getByIdOrAdd(String shadow_id, ItemStack stack) {
-        ItemStack reference = CarpetShadow.shadowMap.getIfPresent(shadow_id);
-        if (reference != null)
-            return reference;
+        if (shadow_id != null && stack != null) {
+            ItemStack reference = CarpetShadow.shadowMap.getIfPresent(shadow_id);
+            if (reference != null)
+                return reference;
+        }
         ((ShadowItem)(Object)stack).carpet_shadow$setShadowId(shadow_id);
         CarpetShadow.shadowMap.put(shadow_id, stack);
         return stack;
