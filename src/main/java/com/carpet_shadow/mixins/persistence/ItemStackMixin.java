@@ -24,8 +24,6 @@ public abstract class ItemStackMixin {
             }else if(CarpetShadowSettings.shadowItemMode.shouldLoadItem()) {
                 String shadow_id = nbt.getString("shadow");
                 stack = Globals.getByIdOrAdd(shadow_id,stack);
-                CarpetShadow.LOGGER.debug("Shadowed item loaded from memory");
-                CarpetShadow.LOGGER.debug("id: " + shadow_id);
             }
         }
         return stack;
@@ -40,8 +38,6 @@ public abstract class ItemStackMixin {
                 ((ShadowItem) this).carpet_shadow$setShadowId(null);
             } else {
                 ret.putString("shadow", shadow_id);
-                CarpetShadow.LOGGER.debug("Shadowed item saved in memory");
-                CarpetShadow.LOGGER.debug("id: " + shadow_id);
             }
         }
         return ret;

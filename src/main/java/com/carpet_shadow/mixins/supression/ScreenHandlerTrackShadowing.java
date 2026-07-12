@@ -43,7 +43,6 @@ public abstract class ScreenHandlerTrackShadowing {
                 shadow = stack2;
 
             if(shadow != null){
-                CarpetShadow.LOGGER.warn("New Shadow Item Created");
                 String shadow_id = ((ShadowItem) (Object) shadow).carpet_shadow$getShadowId();
                 if (shadow_id == null)
                     shadow_id = CarpetShadow.shadow_id_generator.nextString();

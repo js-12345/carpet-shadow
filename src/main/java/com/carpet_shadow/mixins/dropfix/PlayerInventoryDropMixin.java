@@ -18,7 +18,6 @@ public class PlayerInventoryDropMixin {
     public boolean canStackAddMore(boolean original, ItemStack existingStack, ItemStack stack) {
         if (CarpetShadowSettings.shadowItemDropFix) {
             if (original && ((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
-                CarpetShadow.LOGGER.warn("prevent inventory combine");
                 return false;
             }
         }
@@ -34,7 +33,6 @@ public class PlayerInventoryDropMixin {
             ItemStack itemStack = iThis.getMainHandStack();
 
             if (itemStack != null && ((ShadowItem) (Object) itemStack).carpet_shadow$getShadowId() != null && (entireStack || itemStack.getCount() == 1)) {
-                CarpetShadow.LOGGER.warn("should drop shadow");
                 iThis.setStack(iThis.selectedSlot, ItemStack.EMPTY);
                 return itemStack;
             }

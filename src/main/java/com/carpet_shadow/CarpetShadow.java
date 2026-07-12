@@ -23,11 +23,10 @@ import java.util.Collections;
 import java.util.Map;
 
 public class CarpetShadow implements CarpetExtension, ModInitializer {
+
     public static final Cache<String, ItemStack> shadowMap = CacheBuilder.newBuilder().weakValues().build();
     public static final Logger LOGGER = LogManager.getLogger("carpet-shadow");
     public static RandomString shadow_id_generator = new RandomString(CarpetShadowSettings.shadowItemIdSize);
-
-
 
     @Override
     public void onGameStarted() {
