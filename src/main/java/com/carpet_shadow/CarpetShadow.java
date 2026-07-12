@@ -53,6 +53,7 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
             CarpetShadow.shadowMap.cleanUp();
     }
 
+    // TODO: change update suppression information with carpet-fixes on the fly?
     @Override
     public Map<String, String> canHasTranslations(String lang) {
         InputStream langFile = getClass().getClassLoader().getResourceAsStream("assets/carpet-shadow/lang/%s.json".formatted(lang));
