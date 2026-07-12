@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.carpet_shadow.mixins",
+  "plugin": "com.carpet_shadow.CarpetShadowMixinPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "crafting.RecipeManagerMixin",
@@ -28,6 +29,7 @@
     "inv_updates.loaders.CloneCommandMixin",
     "inv_updates.loaders.FallingBlockEntityMixin",
     "persistence.ItemStackMixin",
+    "supression.ScreenHandlerAllowGeneration",
     "supression.ScreenHandlerTrackShadowing",
     "tooltip.InventoryS2CPacketMixin",
     "tooltip.ItemStackMixin",
