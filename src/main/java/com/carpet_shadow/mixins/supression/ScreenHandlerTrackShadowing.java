@@ -1,4 +1,4 @@
-package com.carpet_shadow.mixins.general;
+package com.carpet_shadow.mixins.supression;
 
 import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
@@ -11,18 +11,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScreenHandler.class)
-public abstract class ScreenHandlerMixin {
+public abstract class ScreenHandlerTrackShadowing {
 
-    @Shadow public abstract Slot getSlot(int index);
+    @Shadow
+    public abstract Slot getSlot(int index);
 
     @Shadow public abstract ItemStack getCursorStack();
 
@@ -57,31 +54,6 @@ public abstract class ScreenHandlerMixin {
             }
         }
     }
-
-    @Inject(method = "internalOnSlotClick",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V", shift = At.Shift.BEFORE),
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;onPickupSlotClick(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/ClickType;)V"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/screen/slot/Slot;markDirty()V"))
-    )
-    private void reintroduceSuppressionShadowing1(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci){
-        if (CarpetShadowSettings.shadowSuppressionGeneration){
-            Slot slot = this.getSlot(slotIndex);
-            slot.markDirty();
-        }
-    }
-
-    @Inject(method = "internalOnSlotClick",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V", shift = At.Shift.BEFORE),
-            slice = @Slice(
-                    from = @At(value = "FIELD", target = "Lnet/minecraft/screen/slot/SlotActionType;SWAP:Lnet/minecraft/screen/slot/SlotActionType;", opcode = Opcodes.GETSTATIC),
-                    to = @At(value = "FIELD", target = "Lnet/minecraft/screen/slot/SlotActionType;CLONE:Lnet/minecraft/screen/slot/SlotActionType;", opcode = Opcodes.GETSTATIC))
-    )
-    private void reintroduceSuppressionShadowing2(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci){
-        if (CarpetShadowSettings.shadowSuppressionGeneration){
-            Slot slot = this.getSlot(slotIndex);
-            slot.markDirty();
-        }
-    }
-
 }
+
+
