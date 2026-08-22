@@ -15,21 +15,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Slot.class)
 public abstract class SlotMixin {
 
-    @Shadow public abstract ItemStack getStack();
+    @Shadow
+    public abstract ItemStack getStack();
 
-    @Shadow @Final public Inventory inventory;
+    @Shadow
+    @Final
+    public Inventory inventory;
 
-    @Shadow public abstract int getIndex();
+    @Shadow
+    public abstract int getIndex();
 
-    @Inject(method = "setStack",
-            at = @At(value = "HEAD"))
+    @Inject(
+            method = "setStack",
+            at = @At(value = "HEAD")
+    )
     public void remember_inventory(ItemStack next, CallbackInfo ci) {
-            ItemStack curr = getStack();
-            if(((ShadowItem)(Object)curr).carpet_shadow$getShadowId() != null){
-                ((InventoryItem)(Object)curr).carpet_shadow$removeSlot(this.inventory, getIndex());
-            }
-            if(((ShadowItem)(Object)next).carpet_shadow$getShadowId() != null){
-                ((InventoryItem)(Object)next).carpet_shadow$addSlot(this.inventory, getIndex());
-            }
+        ItemStack curr = getStack();
+        if (ShadowItem.fromItemStack(curr).carpet_shadow$hasShadowId())
+            ((InventoryItem) (Object) curr).carpet_shadow$removeSlot(this.inventory, getIndex());
+        if (ShadowItem.fromItemStack(next).carpet_shadow$hasShadowId())
+            ((InventoryItem) (Object) next).carpet_shadow$addSlot(this.inventory, getIndex());
     }
 }

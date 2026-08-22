@@ -1,6 +1,5 @@
 package com.carpet_shadow.mixins.tooltip;
 
-
 import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.interfaces.ShadowItem;
 import net.minecraft.client.item.TooltipContext;
@@ -24,9 +23,11 @@ public abstract class ItemStackMixin {
     @Inject(method = "getTooltip", at = @At("RETURN"))
     private void postToolTip(@Nullable PlayerEntity player, TooltipContext context, CallbackInfoReturnable<List<Text>> cir) {
         List<Text> list = cir.getReturnValue();
-        if (CarpetShadowSettings.shadowItemTooltip && ((ShadowItem) this).carpet_shadow$getClientShadowId() != null) {
+
+        ShadowItem sThis = (ShadowItem) this;
+        if (CarpetShadowSettings.shadowItemTooltip && sThis.carpet_shadow$hasShadowId()) {
             MutableText text = MutableText.of(new PlainTextContent.Literal("shadow_id: "));
-            MutableText sub = MutableText.of(new PlainTextContent.Literal(((ShadowItem) this).carpet_shadow$getClientShadowId()));
+            MutableText sub = MutableText.of(new PlainTextContent.Literal(sThis.carpet_shadow$getShadowId()));
             sub.formatted(Formatting.GOLD, Formatting.BOLD);
             text.append(sub);
             text.formatted(Formatting.ITALIC);

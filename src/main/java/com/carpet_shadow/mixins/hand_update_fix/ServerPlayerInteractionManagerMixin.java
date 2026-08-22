@@ -20,13 +20,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ServerPlayerInteractionManager.class)
 public abstract class ServerPlayerInteractionManagerMixin {
 
-    @Shadow public abstract boolean isCreative();
+    @Shadow
+    public abstract boolean isCreative();
 
-    @Inject(method = "interactBlock", at = @At(value = "RETURN",shift = At.Shift.BEFORE))
-    private void inject_on_block_use(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir){
-        if(CarpetShadowSettings.shadowItemUseFix && ((ShadowItem)(Object)stack).carpet_shadow$getShadowId() != null && !isCreative()) {
+    @Inject(
+            method = "interactBlock",
+            at = @At(
+                    value = "RETURN",
+                    shift = At.Shift.BEFORE
+            )
+    )
+    private void inject_on_block_use(ServerPlayerEntity player, World world, ItemStack stack, Hand hand, BlockHitResult hitResult, CallbackInfoReturnable<ActionResult> cir) {
+        if (CarpetShadowSettings.shadowItemUseFix && ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId() && !isCreative()) {
             ActionResult result = cir.getReturnValue();
-            if (result==ActionResult.SUCCESS || result == ActionResult.CONSUME) {
+            if (result == ActionResult.SUCCESS || result == ActionResult.CONSUME) {
                 int index = (hand == Hand.OFF_HAND) ? PlayerInventory.OFF_HAND_SLOT : player.getInventory().selectedSlot;
                 player.currentScreenHandler.getSlotIndex(player.getInventory(), index).ifPresent(i -> player.currentScreenHandler.setPreviousTrackedSlot(i, new ItemStack(Blocks.AIR)));
             }

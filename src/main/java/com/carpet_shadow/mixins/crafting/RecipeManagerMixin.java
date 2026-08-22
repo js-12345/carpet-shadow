@@ -8,7 +8,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.inventory.RecipeInputInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.*;
 import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
@@ -29,10 +30,19 @@ public class RecipeManagerMixin {
 
     // TODO: a lot of duplication glitches with crafting table, e.g. 9x9, recipe book click
 
-    @Inject(method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V",
-            at = @At(value = "INVOKE", target = "Ljava/util/Map;entrySet()Ljava/util/Set;", ordinal = 0, shift = At.Shift.BEFORE))
+    @Inject(
+            method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ljava/util/Map;entrySet()Ljava/util/Set;",
+                    ordinal = 0,
+                    shift = At.Shift.BEFORE
+            )
+    )
     private void addShadowRecipe(Map<Identifier, JsonElement> map, ResourceManager resourceManager, Profiler profiler, CallbackInfo ci,
-                                 @Local(ordinal = 1) Map<RecipeType<?>, ImmutableMap.Builder<Identifier, RecipeEntry<?>>> map2, @Local ImmutableMap.Builder<Identifier, Recipe<?>> builder) {
+                                 @Local(ordinal = 1) Map<RecipeType<?>, ImmutableMap.Builder<Identifier, RecipeEntry<?>>> map2,
+                                 @Local ImmutableMap.Builder<Identifier, Recipe<?>> builder) {
+
         Identifier identifier = new Identifier("carpet_shadow", "shadow_recipe");
         Recipe<?> recipe = new BookCloningRecipe(CraftingRecipeCategory.MISC) {
             @Override
@@ -77,11 +87,8 @@ public class RecipeManagerMixin {
                 if (itemToShadow == null || enderchest == null)
                     return ItemStack.EMPTY;
 
-                String id = ((ShadowItem) (Object) itemToShadow).carpet_shadow$getShadowId();
-                if (id == null) {
-                    id = CarpetShadow.shadow_id_generator.nextString();
-                }
-
+                ShadowItem sItemToShadow = ShadowItem.fromItemStack(itemToShadow);
+                String id = sItemToShadow.carpet_shadow$hasShadowId() ? sItemToShadow.carpet_shadow$getShadowId() : CarpetShadow.shadow_id_generator.nextString();
                 return Globals.getByIdOrAdd(id, itemToShadow);
             }
 
@@ -110,7 +117,6 @@ public class RecipeManagerMixin {
                 return super.getRemainder(inventory);
             }
 
-
             @Override
             public boolean fits(int width, int height) {
                 return width * height >= 2;
@@ -121,6 +127,7 @@ public class RecipeManagerMixin {
                 return false;
             }
         };
+
         RecipeEntry<?> recipeEntry = new RecipeEntry<>(identifier, recipe);
         map2.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder()).put(identifier, recipeEntry);
         builder.put(identifier, recipe);
