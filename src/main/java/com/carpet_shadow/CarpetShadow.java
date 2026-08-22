@@ -8,7 +8,6 @@ import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
@@ -66,6 +65,7 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
             return Collections.emptyMap();
         }
         Gson gson = new GsonBuilder().setLenient().create();
-        return gson.fromJson(jsonData, new TypeToken<Map<String, String>>() {}.getType());
+        return gson.fromJson(jsonData, new TypeToken<Map<String, String>>() {
+        }.getType());
     }
 }

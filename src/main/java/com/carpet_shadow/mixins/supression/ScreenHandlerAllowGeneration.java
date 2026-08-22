@@ -28,19 +28,18 @@ public abstract class ScreenHandlerAllowGeneration {
     private int carpet_shadow$lastButton = 0;
 
     @Redirect(
-            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;" +
-                    "Lnet/minecraft/entity/player/PlayerEntity;)V",
+            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerInventory;setStack(ILnet/minecraft/item/ItemStack;)V",
+                    ordinal = 1
+            ),
             slice = @Slice(
                     from = @At(
                             value = "FIELD",
                             target = "Lnet/minecraft/screen/slot/SlotActionType;" +
                                     "SWAP:Lnet/minecraft/screen/slot/SlotActionType;"
                     )
-            ),
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/player/PlayerInventory;setStack(ILnet/minecraft/item/ItemStack;)V",
-                    ordinal = 1
             ),
             require = 0
     )
@@ -51,20 +50,19 @@ public abstract class ScreenHandlerAllowGeneration {
     }
 
     @Inject(
-            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;" +
-                    "Lnet/minecraft/entity/player/PlayerEntity;)V",
+            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V",
+                    ordinal = 2,
+                    shift = At.Shift.AFTER
+            ),
             slice = @Slice(
                     from = @At(
                             value = "FIELD",
                             target = "Lnet/minecraft/screen/slot/SlotActionType;" +
                                     "SWAP:Lnet/minecraft/screen/slot/SlotActionType;"
                     )
-            ),
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V",
-                    ordinal = 2,
-                    shift = At.Shift.AFTER
             ),
             require = 0
     )
@@ -76,19 +74,18 @@ public abstract class ScreenHandlerAllowGeneration {
     }
 
     @Redirect(
-            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;" +
-                    "Lnet/minecraft/entity/player/PlayerEntity;)V",
+            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerInventory;setStack(ILnet/minecraft/item/ItemStack;)V",
+                    ordinal = 2
+            ),
             slice = @Slice(
                     from = @At(
                             value = "FIELD",
                             target = "Lnet/minecraft/screen/slot/SlotActionType;" +
                                     "SWAP:Lnet/minecraft/screen/slot/SlotActionType;"
                     )
-            ),
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/player/PlayerInventory;setStack(ILnet/minecraft/item/ItemStack;)V",
-                    ordinal = 2
             ),
             require = 0
     )
@@ -101,8 +98,13 @@ public abstract class ScreenHandlerAllowGeneration {
     }
 
     @Redirect(
-            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;" +
-                    "Lnet/minecraft/entity/player/PlayerEntity;)V",
+            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/screen/slot/Slot;onTakeItem(Lnet/minecraft/entity/player/PlayerEntity;" +
+                            "Lnet/minecraft/item/ItemStack;)V",
+                    ordinal = 2
+            ),
             slice = @Slice(
                     from = @At(
                             value = "FIELD",
@@ -110,25 +112,22 @@ public abstract class ScreenHandlerAllowGeneration {
                                     "SWAP:Lnet/minecraft/screen/slot/SlotActionType;"
                     )
             ),
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/screen/slot/Slot;onTakeItem(Lnet/minecraft/entity/player/PlayerEntity;" +
-                            "Lnet/minecraft/item/ItemStack;)V",
-                    ordinal = 2
-            ),
             require = 0
     )
     private void carpet_shadow$runAfterSecondInventoryUpdate(Slot instance, PlayerEntity player, ItemStack stack) {
         if (CarpetShadowSettings.shadowSuppressionGeneration) {
             player.getInventory().setStack(carpet_shadow$lastButton, stack);
         }
-        instance.onTakeItem(player,stack);
+        instance.onTakeItem(player, stack);
     }
 
     @Inject(
-            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;" +
-                    "Lnet/minecraft/entity/player/PlayerEntity;)V",
-            locals = LocalCapture.CAPTURE_FAILSOFT,
+            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/screen/ScreenHandler;setCursorStack(Lnet/minecraft/item/ItemStack;)V",
+                    ordinal = 2
+            ),
             slice = @Slice(
                     from = @At(
                             value = "FIELD",
@@ -142,11 +141,7 @@ public abstract class ScreenHandlerAllowGeneration {
                                     "SWAP:Lnet/minecraft/screen/slot/SlotActionType;"
                     )
             ),
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/screen/ScreenHandler;setCursorStack(Lnet/minecraft/item/ItemStack;)V",
-                    ordinal = 2
-            ),
+            locals = LocalCapture.CAPTURE_FAILSOFT,
             require = 0
     )
     private void carpet_shadow$runBeforeThirdInventoryUpdate(int slotIndex, int button, SlotActionType actionType,
@@ -159,8 +154,12 @@ public abstract class ScreenHandlerAllowGeneration {
     }
 
     @Redirect(
-            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;" +
-                    "Lnet/minecraft/entity/player/PlayerEntity;)V",
+            method = "internalOnSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V",
+                    ordinal = 0
+            ),
             slice = @Slice(
                     from = @At(
                             value = "FIELD",
@@ -173,11 +172,6 @@ public abstract class ScreenHandlerAllowGeneration {
                             target = "Lnet/minecraft/screen/slot/SlotActionType;" +
                                     "SWAP:Lnet/minecraft/screen/slot/SlotActionType;"
                     )
-            ),
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/screen/slot/Slot;setStack(Lnet/minecraft/item/ItemStack;)V",
-                    ordinal = 0
             ),
             require = 0
     )

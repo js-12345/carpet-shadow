@@ -12,10 +12,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(BlockDataObject.class)
 public abstract class BlockDataObjectMixin {
 
-    @Redirect(method = "setNbt",at=@At(value = "INVOKE",target = "Lnet/minecraft/block/entity/BlockEntity;readNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
-    private void interceptBlockEntityLoad(BlockEntity instance, NbtCompound nbt){
-        InventoryItem.readNbt(instance,nbt);
+    @Redirect(method = "setNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntity;readNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
+    private void interceptBlockEntityLoad(BlockEntity instance, NbtCompound nbt) {
+        InventoryItem.readNbt(instance, nbt);
     }
-
-
 }

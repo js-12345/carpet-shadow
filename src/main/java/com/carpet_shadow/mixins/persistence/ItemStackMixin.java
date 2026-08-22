@@ -17,7 +17,7 @@ public abstract class ItemStackMixin {
     @Shadow
     public abstract boolean isEmpty();
 
-    @ModifyReturnValue(at = @At("RETURN"), method = "fromNbt")
+    @ModifyReturnValue(method = "fromNbt", at = @At("RETURN"))
     private static ItemStack post_fromNbt(ItemStack stack, NbtCompound nbt) {
         if (nbt.contains("shadow")) {
             if (CarpetShadowSettings.shadowItemMode.shouldResetCount()) {
@@ -31,7 +31,7 @@ public abstract class ItemStackMixin {
         return stack;
     }
 
-    @ModifyReturnValue(at = @At("RETURN"), method = "writeNbt")
+    @ModifyReturnValue(method = "writeNbt", at = @At("RETURN"))
     private NbtCompound post_writeNbt(NbtCompound ret, NbtCompound orig) {
         ShadowItem sThis = (ShadowItem) this;
         if (sThis.carpet_shadow$hasShadowId()) {

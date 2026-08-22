@@ -11,27 +11,38 @@ import static carpet.api.settings.RuleCategory.*;
 
 public class CarpetShadowSettings {
     public static final String SHADOW = "shadow_items";
-    @Rule( categories = {SHADOW, BUGFIX})
+
+    @Rule(categories = {SHADOW, BUGFIX})
     public static Mode shadowItemMode = Mode.UNLINK;
-    @Rule( categories = {SHADOW}, validators = {IdSizeValidator.class})
+
+    @Rule(categories = {SHADOW}, validators = {IdSizeValidator.class})
     public static int shadowItemIdSize = 5;
-    @Rule( categories = {SHADOW, FEATURE})
+
+    @Rule(categories = {SHADOW, FEATURE})
     public static boolean shadowSuppressionGeneration = false;
-    @Rule( categories = {SHADOW, FEATURE})
+
+    @Rule(categories = {SHADOW, FEATURE})
     public static boolean shadowCraftingGeneration = false;
-    @Rule( categories = {SHADOW, FEATURE})
+
+    @Rule(categories = {SHADOW, FEATURE})
     public static boolean shadowItemTooltip = false;
-    @Rule( categories = {SHADOW, BUGFIX})
+
+    @Rule(categories = {SHADOW, BUGFIX})
     public static boolean shadowItemInventoryFragilityFix = false;
-    @Rule( categories = {SHADOW, BUGFIX})
+
+    @Rule(categories = {SHADOW, BUGFIX})
     public static boolean shadowItemTransferFragilityFix = false;
-    @Rule( categories = {SHADOW, BUGFIX, EXPERIMENTAL})
+
+    @Rule(categories = {SHADOW, BUGFIX, EXPERIMENTAL})
     public static boolean shadowItemUpdateFix = false;
-    @Rule( categories = {SHADOW, OPTIMIZATION, FEATURE})
+
+    @Rule(categories = {SHADOW, OPTIMIZATION, FEATURE})
     public static boolean shadowItemPreventCombine = false;
-    @Rule( categories = {SHADOW, OPTIMIZATION, FEATURE})
+
+    @Rule(categories = {SHADOW, OPTIMIZATION, FEATURE})
     public static boolean shadowItemUseFix = false;
-    @Rule( categories = {SHADOW, FEATURE})
+
+    @Rule(categories = {SHADOW, FEATURE})
     public static boolean shadowItemDropFix = false;
 
     private static class IdSizeValidator extends Validator<Integer> {
@@ -46,10 +57,10 @@ public class CarpetShadowSettings {
         }
     }
 
-    public enum Mode{
-        UNLINK(false,false),
-        PERSIST(true,false),
-        VANISH(true,true);
+    public enum Mode {
+        UNLINK(false, false),
+        PERSIST(true, false),
+        VANISH(true, true);
 
         private final boolean shouldLoadItem;
         private final boolean shouldResetCount;
@@ -57,6 +68,7 @@ public class CarpetShadowSettings {
         public boolean shouldLoadItem() {
             return shouldLoadItem;
         }
+
         public boolean shouldResetCount() {
             return shouldResetCount;
         }

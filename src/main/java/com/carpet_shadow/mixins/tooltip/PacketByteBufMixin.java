@@ -64,7 +64,7 @@ public abstract class PacketByteBufMixin {
     @Inject(method = "readItemStack", at = @At(value = "RETURN"))
     public void filter_shadow_lore(CallbackInfoReturnable<ItemStack> cir) {
         ItemStack stack = cir.getReturnValue();
-        ShadowItem sStack =  ShadowItem.fromItemStack(stack);
+        ShadowItem sStack = ShadowItem.fromItemStack(stack);
 
         String string;
         MutableText mutableText2;

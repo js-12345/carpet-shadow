@@ -22,7 +22,7 @@ import java.util.Set;
 public abstract class ItemStackMixin implements InventoryItem {
 
     @Unique
-    Set<Pair<Inventory,Integer>> slots = new HashSet<>();
+    Set<Pair<Inventory, Integer>> slots = new HashSet<>();
 
     @Override
     public Collection<Inventory> carpet_shadow$getInventories() {
@@ -31,7 +31,7 @@ public abstract class ItemStackMixin implements InventoryItem {
 
     @Override
     public void carpet_shadow$addSlot(Inventory inventory, int slot) {
-        slots.add(new ImmutablePair<>(inventory,slot));
+        slots.add(new ImmutablePair<>(inventory, slot));
     }
 
     @Override
@@ -39,12 +39,10 @@ public abstract class ItemStackMixin implements InventoryItem {
         slots.remove(new ImmutablePair<>(inventory, slot));
     }
 
-    @Inject(method = "setCount", at=@At("RETURN"))
-    public void propagate_update(int count, CallbackInfo ci){
+    @Inject(method = "setCount", at = @At("RETURN"))
+    public void propagate_update(int count, CallbackInfo ci) {
         if (CarpetShadowSettings.shadowItemUpdateFix) {
             Globals.toUpdate.addAll(carpet_shadow$getInventories());
         }
     }
-
-
 }

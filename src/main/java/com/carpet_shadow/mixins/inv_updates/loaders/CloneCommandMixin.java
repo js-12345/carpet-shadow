@@ -12,10 +12,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(CloneCommand.class)
 public abstract class CloneCommandMixin {
 
-    @Redirect(method = "execute",at=@At(value = "INVOKE",target = "Lnet/minecraft/block/entity/BlockEntity;readNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
-    private static void interceptBlockEntityLoad(BlockEntity instance, NbtCompound nbt){
-        InventoryItem.readNbt(instance,nbt);
+    @Redirect(
+            method = "execute",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/block/entity/BlockEntity;readNbt(Lnet/minecraft/nbt/NbtCompound;)V"
+            )
+    )
+    private static void interceptBlockEntityLoad(BlockEntity instance, NbtCompound nbt) {
+        InventoryItem.readNbt(instance, nbt);
     }
-
-
 }
