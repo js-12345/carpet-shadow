@@ -4,7 +4,7 @@ import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.ItemEntitySlot;
 import com.carpet_shadow.interfaces.ShadowItem;
-import com.carpet_shadow.interfaces.ShifingItem;
+import com.carpet_shadow.interfaces.ShiftingItem;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.Objects;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemEntitySlot, ShifingItem {
+public abstract class ItemStackMixin implements ItemEntitySlot, ShiftingItem {
 
     @Unique
     boolean shiftMoving = false;
