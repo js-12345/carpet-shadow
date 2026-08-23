@@ -98,12 +98,12 @@ public abstract class ItemEntityMixin {
             )
     )
     public void setEntityForStack(PlayerEntity player, CallbackInfo ci, @Local(ordinal = 0) ItemStack stack) {
-        ((ItemEntitySlot) (Object) stack).carpet_shadow$setEntity((ItemEntity) (Object) this);
+        ItemEntitySlot.fromItemStack(stack).carpet_shadow$setEntity((ItemEntity) (Object) this);
     }
 
     @Inject(method = "onPlayerCollision", at = @At(value = "RETURN"))
     public void resetEntityForStack(PlayerEntity player, CallbackInfo ci, @Local(ordinal = 0) ItemStack stack) {
-        ((ItemEntitySlot) (Object) stack).carpet_shadow$setEntity(null);
+        ItemEntitySlot.fromItemStack(stack).carpet_shadow$setEntity(null);
     }
 
     @Inject(method = "onPlayerCollision", at = @At("HEAD"))

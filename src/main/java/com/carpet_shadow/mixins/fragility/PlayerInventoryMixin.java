@@ -40,7 +40,7 @@ public abstract class PlayerInventoryMixin {
     )
     private ItemStack copy_damaged_item(ItemStack instance, Operation<ItemStack> original) {
         if ((CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ShadowItem.fromItemStack(instance).carpet_shadow$hasShadowId()) {
-            ItemEntity entity = ((ItemEntitySlot) (Object) instance).carpet_shadow$getEntity();
+            ItemEntity entity = ItemEntitySlot.fromItemStack(instance).carpet_shadow$getEntity();
             if (entity != null)
                 entity.discard();
             return instance;
@@ -64,7 +64,7 @@ public abstract class PlayerInventoryMixin {
     )
     private void modify_count(ItemStack instance, int count, Operation<Void> original) {
         if (count == 0 && (CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ShadowItem.fromItemStack(instance).carpet_shadow$hasShadowId()) {
-            ItemEntity entity = ((ItemEntitySlot) (Object) instance).carpet_shadow$getEntity();
+            ItemEntity entity = ItemEntitySlot.fromItemStack(instance).carpet_shadow$getEntity();
             if (entity != null)
                 entity.discard();
             else
@@ -85,7 +85,7 @@ public abstract class PlayerInventoryMixin {
     public void add_shadow_item(int slot, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if ((CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId()) {
             this.setStack(slot, stack);
-            ItemEntity entity = ((ItemEntitySlot) (Object) stack).carpet_shadow$getEntity();
+            ItemEntity entity = ItemEntitySlot.fromItemStack(stack).carpet_shadow$getEntity();
             if (entity != null)
                 entity.discard();
             cir.setReturnValue(-1);
