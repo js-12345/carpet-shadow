@@ -6,11 +6,13 @@ import com.carpet_shadow.interfaces.ShadowItem;
 import com.carpet_shadow.interfaces.ShiftingItem;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.util.ClickType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,8 +26,33 @@ public abstract class ScreenHandlerMixin {
     @Shadow
     public abstract ItemStack getCursorStack();
 
-    // TODO: deletion while stack on cursor -> clicking on non shadow stack
-    // TODO: click item dragging not working
+    // TODO: click item dragging not working: currently intended
+
+    @WrapOperation(
+            method = "internalOnSlotClick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;canCombine(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z"
+            ),
+            slice = @Slice(
+                    from = @At(
+                            value = "INVOKE",
+                            target = "Lnet/minecraft/screen/slot/Slot;canInsert(Lnet/minecraft/item/ItemStack;)Z",
+                            ordinal = 2
+                    ),
+                    to = @At(
+                            value = "INVOKE",
+                            target = "Lnet/minecraft/screen/slot/Slot;getMaxItemCount(Lnet/minecraft/item/ItemStack;)I",
+                            ordinal = 1
+                    )
+            )
+    )
+    public boolean preventDeleteOnClickOnNonShadowItemOfSameType(ItemStack stack, ItemStack otherStack, Operation<Boolean> original, @Local ClickType clickType) {
+        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && clickType == ClickType.LEFT && ShadowItem.fromItemStack(otherStack).carpet_shadow$hasShadowId())
+            return false;
+
+        return original.call(stack, otherStack);
+    }
 
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"))
     public void merging_start(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
