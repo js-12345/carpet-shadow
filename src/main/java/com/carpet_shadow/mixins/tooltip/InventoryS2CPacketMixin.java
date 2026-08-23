@@ -12,14 +12,17 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(InventoryS2CPacket.class)
 public abstract class InventoryS2CPacketMixin {
 
-
-    @WrapOperation(method = "<init>(IILnet/minecraft/util/collection/DefaultedList;Lnet/minecraft/item/ItemStack;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;copy()Lnet/minecraft/item/ItemStack;"))
+    @WrapOperation(
+            method = "<init>(IILnet/minecraft/util/collection/DefaultedList;Lnet/minecraft/item/ItemStack;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;copy()Lnet/minecraft/item/ItemStack;"
+            )
+    )
     public ItemStack copy_redirect(ItemStack instance, Operation<ItemStack> original) {
         if (CarpetShadowSettings.shadowItemTooltip) {
             return ShadowItem.carpet_shadow$copy_redirect(instance, original);
         }
         return original.call(instance);
     }
-
 }

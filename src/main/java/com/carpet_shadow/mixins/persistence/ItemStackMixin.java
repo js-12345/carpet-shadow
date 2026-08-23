@@ -14,30 +14,32 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    @Shadow public abstract boolean isEmpty();
+    @Shadow
+    public abstract boolean isEmpty();
 
-    @ModifyReturnValue(at = @At("RETURN"), method = "fromNbt")
+    @ModifyReturnValue(method = "fromNbt", at = @At("RETURN"))
     private static ItemStack post_fromNbt(ItemStack stack, NbtCompound nbt) {
         if (nbt.contains("shadow")) {
-            if(CarpetShadowSettings.shadowItemMode.shouldResetCount()){
+            if (CarpetShadowSettings.shadowItemMode.shouldResetCount()) {
                 stack.setCount(0);
-            }else if(CarpetShadowSettings.shadowItemMode.shouldLoadItem()) {
+            } else if (CarpetShadowSettings.shadowItemMode.shouldLoadItem()) {
                 String shadow_id = nbt.getString("shadow");
-                stack = Globals.getByIdOrAdd(shadow_id,stack);
+                stack = Globals.getByIdOrAdd(shadow_id, stack);
             }
         }
+
         return stack;
     }
 
-    @ModifyReturnValue(at = @At("RETURN"), method = "writeNbt")
+    @ModifyReturnValue(method = "writeNbt", at = @At("RETURN"))
     private NbtCompound post_writeNbt(NbtCompound ret, NbtCompound orig) {
-        String shadow_id = ((ShadowItem) this).carpet_shadow$getShadowId();
-        if (shadow_id != null) {
+        ShadowItem sThis = (ShadowItem) this;
+        if (sThis.carpet_shadow$hasShadowId()) {
             if (this.isEmpty()) {
-                CarpetShadow.shadowMap.invalidate(shadow_id);
-                ((ShadowItem) this).carpet_shadow$setShadowId(null);
+                CarpetShadow.shadowMap.invalidate(sThis.carpet_shadow$getShadowId());
+                sThis.carpet_shadow$setShadowId(null);
             } else {
-                ret.putString("shadow", shadow_id);
+                ret.putString("shadow", sThis.carpet_shadow$getShadowId());
             }
         }
         return ret;

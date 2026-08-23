@@ -10,11 +10,10 @@ import java.util.Set;
 public class Globals {
 
     public static final Set<Thread> mergingThreads = new HashSet<>();
-
     public static final Set<Inventory> toUpdate = new HashSet<>();
 
     public static ItemStack getByIdOrNull(String shadow_id) {
-        if(shadow_id == null)
+        if (shadow_id == null)
             return null;
         return CarpetShadow.shadowMap.getIfPresent(shadow_id);
     }
@@ -25,7 +24,8 @@ public class Globals {
             if (reference != null)
                 return reference;
         }
-        ((ShadowItem)(Object)stack).carpet_shadow$setShadowId(shadow_id);
+
+        ShadowItem.fromItemStack(stack).carpet_shadow$setShadowId(shadow_id);
         CarpetShadow.shadowMap.put(shadow_id, stack);
         return stack;
     }
@@ -33,8 +33,9 @@ public class Globals {
 
     public static boolean shadow_merge_check(ItemStack stack1, ItemStack stack2, boolean ret) {
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix && mergingThreads.contains(Thread.currentThread()) && ret) {
-            String shadow1 = ((ShadowItem) (Object) stack1).carpet_shadow$getShadowId();
-            String shadow2 = ((ShadowItem) (Object) stack2).carpet_shadow$getShadowId();
+            String shadow1 = ShadowItem.fromItemStack(stack1).carpet_shadow$getShadowId();
+            String shadow2 = ShadowItem.fromItemStack(stack2).carpet_shadow$getShadowId();
+
             if (CarpetShadowSettings.shadowItemPreventCombine) {
                 if (shadow1 != null && shadow2 != null)
                     return false;
@@ -43,6 +44,7 @@ public class Globals {
                     return false;
             }
         }
+
         return ret;
     }
 }

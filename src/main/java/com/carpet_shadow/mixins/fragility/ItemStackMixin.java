@@ -4,10 +4,8 @@ import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.ItemEntitySlot;
 import com.carpet_shadow.interfaces.ShadowItem;
-import com.carpet_shadow.interfaces.ShifingItem;
+import com.carpet_shadow.interfaces.ShiftingItem;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.llamalad7.mixinextras.sugar.Share;
-import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import java.util.Objects;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ItemEntitySlot, ShifingItem {
+public abstract class ItemStackMixin implements ItemEntitySlot, ShiftingItem {
 
     @Unique
     boolean shiftMoving = false;
@@ -57,12 +55,11 @@ public abstract class ItemStackMixin implements ItemEntitySlot, ShifingItem {
     @ModifyReturnValue(method = "areEqual", at = @At("RETURN"))
     private static boolean check_Equal(boolean original, ItemStack left, ItemStack right) {
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix && original) {
-            String shadow1 = ((ShadowItem) (Object) left).carpet_shadow$getShadowId();
-            String shadow2 = ((ShadowItem) (Object) right).carpet_shadow$getShadowId();
-            if (!Objects.equals(shadow1, shadow2)) {
-                return false;
-            }
+            String shadow1 = ShadowItem.fromItemStack(left).carpet_shadow$getShadowId();
+            String shadow2 = ShadowItem.fromItemStack(right).carpet_shadow$getShadowId();
+            return Objects.equals(shadow1, shadow2);
         }
+
         return original;
     }
 }

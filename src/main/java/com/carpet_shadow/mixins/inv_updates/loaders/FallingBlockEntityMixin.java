@@ -12,10 +12,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(FallingBlockEntity.class)
 public abstract class FallingBlockEntityMixin {
 
-    @Redirect(method = "tick",at=@At(value = "INVOKE",target = "Lnet/minecraft/block/entity/BlockEntity;readNbt(Lnet/minecraft/nbt/NbtCompound;)V"))
-    public void interceptBlockEntityLoad(BlockEntity instance, NbtCompound nbt){
-        InventoryItem.readNbt(instance,nbt);
+    @Redirect(
+            method = "tick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/block/entity/BlockEntity;readNbt(Lnet/minecraft/nbt/NbtCompound;)V"
+            )
+    )
+    public void interceptBlockEntityLoad(BlockEntity instance, NbtCompound nbt) {
+        InventoryItem.readNbt(instance, nbt);
     }
-
-
 }

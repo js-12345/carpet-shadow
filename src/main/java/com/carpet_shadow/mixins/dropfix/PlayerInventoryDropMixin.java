@@ -1,6 +1,5 @@
 package com.carpet_shadow.mixins.dropfix;
 
-import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.interfaces.ShadowItem;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -16,11 +15,8 @@ public class PlayerInventoryDropMixin {
 
     @ModifyReturnValue(method = "canStackAddMore(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Z", at = @At("RETURN"))
     public boolean canStackAddMore(boolean original, ItemStack existingStack, ItemStack stack) {
-        if (CarpetShadowSettings.shadowItemDropFix) {
-            if (original && ((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
-                return false;
-            }
-        }
+        if (CarpetShadowSettings.shadowItemDropFix && original && ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId())
+            return false;
 
         return original;
     }
@@ -32,7 +28,7 @@ public class PlayerInventoryDropMixin {
         if (CarpetShadowSettings.shadowItemDropFix) {
             ItemStack itemStack = iThis.getMainHandStack();
 
-            if (itemStack != null && ((ShadowItem) (Object) itemStack).carpet_shadow$getShadowId() != null && (entireStack || itemStack.getCount() == 1)) {
+            if (itemStack != null && ShadowItem.fromItemStack(itemStack).carpet_shadow$hasShadowId() && (entireStack || itemStack.getCount() == 1)) {
                 iThis.setStack(iThis.selectedSlot, ItemStack.EMPTY);
                 return itemStack;
             }

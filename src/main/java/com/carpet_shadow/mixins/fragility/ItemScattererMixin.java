@@ -15,18 +15,30 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ItemScatterer.class)
 public abstract class ItemScattererMixin {
 
-    @ModifyExpressionValue(method = "spawn(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE",target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"))
-    private static boolean exitLoop(boolean empty, @Share("break") LocalBooleanRef quit){
+    @ModifyExpressionValue(
+            method = "spawn(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+            )
+    )
+    private static boolean exitLoop(boolean empty, @Share("break") LocalBooleanRef quit) {
         return empty || quit.get();
     }
 
-    @WrapOperation(method = "spawn(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE",target = "Lnet/minecraft/item/ItemStack;split(I)Lnet/minecraft/item/ItemStack;"))
-    private static ItemStack modify_split(ItemStack stack, int amount, Operation<ItemStack> original, @Share("break") LocalBooleanRef quit){
-        String shadow_id = ((ShadowItem)(Object)stack).carpet_shadow$getShadowId();
-        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && shadow_id!=null){
+    @WrapOperation(
+            method = "spawn(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;split(I)Lnet/minecraft/item/ItemStack;"
+            )
+    )
+    private static ItemStack modify_split(ItemStack stack, int amount, Operation<ItemStack> original, @Share("break") LocalBooleanRef quit) {
+        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId()) {
             quit.set(true);
             return stack;
         }
+
         return original.call(stack, amount);
     }
 }

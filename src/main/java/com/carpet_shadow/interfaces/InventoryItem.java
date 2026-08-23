@@ -1,4 +1,5 @@
 package com.carpet_shadow.interfaces;
+
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -8,10 +9,12 @@ import java.util.Collection;
 
 public interface InventoryItem {
 
+    static InventoryItem fromItemStack(ItemStack stack) {
+        return (InventoryItem) (Object) stack;
+    }
+
     Collection<Inventory> carpet_shadow$getInventories();
-
     void carpet_shadow$addSlot(Inventory inventory, int slot);
-
     void carpet_shadow$removeSlot(Inventory inventory, int slot);
 
     static void readNbt(BlockEntity instance, NbtCompound nbt) {
@@ -19,22 +22,22 @@ public interface InventoryItem {
             try {
                 for (int index = 0; index < inv.size(); index++) {
                     ItemStack stack = inv.getStack(index);
-                    if (((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
-                        ((InventoryItem) (Object) stack).carpet_shadow$removeSlot(inv, index);
-                    }
+                    if (ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId())
+                        InventoryItem.fromItemStack(stack).carpet_shadow$removeSlot(inv, index);
                 }
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
 
             instance.readNbt(nbt);
 
             try {
                 for (int index = 0; index < inv.size(); index++) {
                     ItemStack stack = inv.getStack(index);
-                    if (((ShadowItem) (Object) stack).carpet_shadow$getShadowId() != null) {
-                        ((InventoryItem) (Object) stack).carpet_shadow$addSlot(inv, index);
-                    }
+                    if (ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId())
+                        InventoryItem.fromItemStack(stack).carpet_shadow$addSlot(inv, index);
                 }
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         } else {
             instance.readNbt(nbt);
         }
