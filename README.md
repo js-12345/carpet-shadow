@@ -8,7 +8,19 @@ carpet extension to fix various bugs related to shadow item stacks
     - UNLINK    ( vanilla default = dupe them )
     - PERSIST   ( shadow items will re-link once re-load )
     - VANISH    ( shadow items will disappear when re-load ) 
-    
+
+ - **shadowItemIdSize**
+
+   changes the length of the shadow stack unique identifiers, smaller can lead to more id collisions
+
+- **shadowSuppressionGeneration**
+
+  enables the shadow item creation via update suppression
+
+- **shadowCraftingGeneration**
+
+  enables the shadow item creation via a crafting recipe; put item to shadow and an ender chest into crafting grid
+
  - **shadowItemTooltip**
 
     shows the shadow stack unique identifier when hovering over a shadow stack with the mouse
@@ -26,12 +38,15 @@ carpet extension to fix various bugs related to shadow item stacks
     by default instances of the same shadow stack won't merge on inventory actions; this option expands that behavior and prevents merging operations between any shadow stack
     
     **PS:** *this option only has an effect if **shadowItemFragilityFixes** is active*
-    
- - **shadowItemIdSize**
 
-    changes the length of the shadow stack unique identifiers
-    
-    **PS:** *do not edit unless you know what you're doing*
+- **shadowItemUseFix**
+
+    prevents desync between client and server when using a fast refilling shadow stack
+
+- **shadowItemDropFix**
+
+  allows for correct item dropping while preserving the shadow item
+
 
 ## Feature List
 
@@ -45,17 +60,18 @@ carpet extension to fix various bugs related to shadow item stacks
 	 - [x] Player Pick-Up shadow stacks from Item Entities
 	 - [x] Mouse Pickup and Place shadow stacks
 	 - [x] Shift Click shadow stacks ( will only transfer them entirely w/o merging )
-	 - [x] Quick Craft with/to shadow stacks ( simply disallowed )
+	 - [x] Quick Craft (dragging of items in inventory) with/to shadow stacks ( simply disallowed )
+     - [x] To delete a shadow item left click on same shadow item while to be deleted item is held on cursor; Currently also: put in crafting grid and exit ui, deletes also tooltip and shadow id
 	 - [x] Hoppers
 		 - [x] Fail to pull from shadow stacks
 	 - [x] Droppers
 		 - [x] Unlinking on transfer to Inventory
- - [x] Inventory Uodates
+ - [x] Inventory Updates
  	 - [x] propagation of updates after the world tick   
 
 ## Known Bugs
- - [ ] **General**
-	 - [ ] **MINOR**: this mod only tracks shadow items that get generated with update suppression and the item swap operation, if another method of generating a shadow item is found this mod will not work.
+ - [x] **General**
+	 - [x] **MINOR**: this mod only tracks shadow items that get generated with update suppression and the item swap operation, if another method of generating a shadow item is found this mod will not work. (That's the nature of this mod)
  - [ ] **Persistence**
 	 - [ ] **MINOR**: when the mod generates a new shadow ID it only performs a check on the currently loaded IDs so there is a very small chance of overlapping IDs
 	 - [ ] **MINOR**: if two instances of a shadow item get unloaded with different amounts, the stack count will be of the first instance to get loaded back
@@ -68,6 +84,4 @@ carpet extension to fix various bugs related to shadow item stacks
    - [ ] **MINOR**: on enchanting
    - [ ] **MINOR**: on renaming/anvil
    - [ ] **MINOR**: stone cutter?
-
-
-
+   - [ ] **MAJOR**: on recipe book clicks and crafting ui, some stuff (unlinking) maybe intended?
