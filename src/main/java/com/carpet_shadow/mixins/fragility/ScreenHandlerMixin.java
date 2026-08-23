@@ -86,9 +86,9 @@ public abstract class ScreenHandlerMixin {
                 ShadowItem.fromItemStack(mirror).carpet_shadow$setShadowId(sOg_item.carpet_shadow$getShadowId());
                 og.setStack(mirror);
 
-                ((ShiftingItem) (Object) mirror).carpet_shadow$setShiftMoving(true);
+                ShiftingItem.fromItemStack(mirror).carpet_shadow$setShiftMoving(true);
                 ItemStack ret = original.call(instance, player, index);
-                ((ShiftingItem) (Object) mirror).carpet_shadow$setShiftMoving(false);
+                ShiftingItem.fromItemStack(mirror).carpet_shadow$setShiftMoving(false);
 
                 if (ret == ItemStack.EMPTY) {
                     og_item = Globals.getByIdOrAdd(sOg_item.carpet_shadow$getShadowId(), og_item);
@@ -142,7 +142,7 @@ public abstract class ScreenHandlerMixin {
             )
     )
     public boolean fix_shift2(ItemStack instance, Operation<Boolean> original) {
-        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ((ShiftingItem) (Object) instance).carpet_shadow$isShiftMoving())
+        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ShiftingItem.fromItemStack(instance).carpet_shadow$isShiftMoving())
             return true;
         return original.call(instance);
     }
