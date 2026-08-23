@@ -32,8 +32,8 @@ public abstract class SlotMixin {
     public void remember_inventory(ItemStack next, CallbackInfo ci) {
         ItemStack curr = getStack();
         if (ShadowItem.fromItemStack(curr).carpet_shadow$hasShadowId())
-            ((InventoryItem) (Object) curr).carpet_shadow$removeSlot(this.inventory, getIndex());
+            InventoryItem.fromItemStack(curr).carpet_shadow$removeSlot(this.inventory, getIndex());
         if (ShadowItem.fromItemStack(next).carpet_shadow$hasShadowId())
-            ((InventoryItem) (Object) next).carpet_shadow$addSlot(this.inventory, getIndex());
+            InventoryItem.fromItemStack(next).carpet_shadow$addSlot(this.inventory, getIndex());
     }
 }

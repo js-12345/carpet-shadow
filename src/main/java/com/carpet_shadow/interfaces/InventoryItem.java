@@ -9,6 +9,10 @@ import java.util.Collection;
 
 public interface InventoryItem {
 
+    static InventoryItem fromItemStack(ItemStack stack) {
+        return (InventoryItem) (Object) stack;
+    }
+
     Collection<Inventory> carpet_shadow$getInventories();
     void carpet_shadow$addSlot(Inventory inventory, int slot);
     void carpet_shadow$removeSlot(Inventory inventory, int slot);
@@ -19,7 +23,7 @@ public interface InventoryItem {
                 for (int index = 0; index < inv.size(); index++) {
                     ItemStack stack = inv.getStack(index);
                     if (ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId())
-                        ((InventoryItem) (Object) stack).carpet_shadow$removeSlot(inv, index);
+                        InventoryItem.fromItemStack(stack).carpet_shadow$removeSlot(inv, index);
                 }
             } catch (Exception ignored) {
             }
@@ -30,7 +34,7 @@ public interface InventoryItem {
                 for (int index = 0; index < inv.size(); index++) {
                     ItemStack stack = inv.getStack(index);
                     if (ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId())
-                        ((InventoryItem) (Object) stack).carpet_shadow$addSlot(inv, index);
+                        InventoryItem.fromItemStack(stack).carpet_shadow$addSlot(inv, index);
                 }
             } catch (Exception ignored) {
             }
