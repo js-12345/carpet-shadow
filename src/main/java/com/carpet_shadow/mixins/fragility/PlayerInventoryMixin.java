@@ -6,13 +6,16 @@ import com.carpet_shadow.interfaces.ShadowItem;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerInventory.class)
@@ -20,6 +23,45 @@ public abstract class PlayerInventoryMixin {
 
     @Shadow
     public abstract void setStack(int slot, ItemStack stack);
+
+    @Shadow
+    public abstract ItemStack getStack(int slot);
+
+    @Shadow
+    public int selectedSlot;
+
+    @Shadow
+    public abstract int getEmptySlot();
+
+    @Shadow
+    @Final
+    public PlayerEntity player;
+
+    @Inject(
+            method = "offer",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;isEmpty()Z",
+                    shift = At.Shift.AFTER
+            ),
+            cancellable = true
+    )
+    public void fixDropOfHeldStackOnClosingInv(ItemStack stack, boolean notifiesClient, CallbackInfo ci) {
+        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && !stack.isEmpty() && ShadowItem.fromItemStack(stack).carpet_shadow$hasShadowId()) {
+            int slot = -1;
+            if (this.getStack(selectedSlot).isEmpty())
+                slot = selectedSlot;
+            else
+                slot = this.getEmptySlot();
+
+            if (slot == -1)
+                this.player.dropItem(stack, false);
+            else
+                this.setStack(slot, stack);
+
+            ci.cancel();
+        }
+    }
 
     @WrapOperation(
             method = "insertStack(ILnet/minecraft/item/ItemStack;)Z",
