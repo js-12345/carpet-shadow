@@ -1,5 +1,6 @@
 package com.carpet_shadow.mixins.fragility;
 
+import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.ShadowItem;
@@ -27,6 +28,17 @@ public abstract class ScreenHandlerMixin {
     public abstract ItemStack getCursorStack();
 
     // TODO: click item dragging not working: currently intended
+
+    @WrapOperation(
+            method = "checkCursorStackUpdates",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;copy()Lnet/minecraft/item/ItemStack;"
+            )
+    )
+    public ItemStack fixingShadowItemCopyLeadingClientServerMismatch(ItemStack instance, Operation<ItemStack> original) {
+        return ShadowItem.carpet_shadow$copy_redirect(instance, original);
+    }
 
     @WrapOperation(
             method = "internalOnSlotClick",
