@@ -37,7 +37,7 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
     @Override
     public void onInitialize() {
         CarpetServer.manageExtension(new CarpetShadow());
-        CarpetShadow.LOGGER.info("Carpet Shadow Loading!");
+        CarpetShadowCommands.init();
     }
 
     @Override
