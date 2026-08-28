@@ -8,6 +8,7 @@
     "crafting.RecipeManagerMixin",
     "dropfix.PlayerInventoryDropMixin",
     "fragility.DropperBlockMixin",
+    "fragility.ForgingScreenHandlerMixin",
     "fragility.HopperBlockEntityMixin",
     "fragility.ItemEntityMixin",
     "fragility.ItemScattererMixin",
