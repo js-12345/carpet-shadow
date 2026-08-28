@@ -29,9 +29,9 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
 
     @Override
     public void onGameStarted() {
-        CarpetShadow.LOGGER.info("Carpet Shadow Loaded!");
         CarpetServer.settingsManager.parseSettingsClass(CarpetShadowSettings.class);
         shadow_id_generator = new RandomString(CarpetShadowSettings.shadowItemIdSize);
+        CarpetShadow.LOGGER.info("Carpet Shadow Loaded!");
     }
 
     @Override
