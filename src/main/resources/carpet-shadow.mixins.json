@@ -7,6 +7,8 @@
   "mixins": [
     "crafting.RecipeManagerMixin",
     "dropfix.PlayerInventoryDropMixin",
+    "fragility.BrewingStandScreenHandler$PotionSlotMixin",
+    "fragility.BrewingStandScreenHandlerMixin",
     "fragility.DropperBlockMixin",
     "fragility.ForgingScreenHandlerMixin",
     "fragility.HopperBlockEntityMixin",
