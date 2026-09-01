@@ -59,13 +59,12 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
   - Player Join/Leave
   - Chunk Unload/Reload
   - Shulker Box Break/Place
-  - Bundle add/remove ( To be tested )
 - Fragility Fixes
   - Player Pick-Up shadow stacks from Item Entities
   - Mouse Pickup and Place shadow stacks
   - Shift Click shadow stacks ( will only transfer them entirely w/o merging )
   - Quick Craft (dragging of items in inventory) with/to shadow stacks ( simply disallowed )
-  - To delete a shadow item left click on same shadow item while to be deleted item is held on cursor; Currently also: put in crafting grid and exit ui, deletes also tooltip and shadow id
+  - To delete a shadow item left click on same shadow item while to be deleted item is held on cursor
   - Hoppers
   - Droppers
 - Propagation of inventory updates after the world tick
@@ -90,6 +89,7 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
   - [ ] **MINOR**: on enchanting
   - [x] **MINOR**: on renaming/anvil and smithing table (currently just disallowed)
   - [ ] **MAJOR**: on recipe book clicks and crafting ui, some stuff (unlinking) maybe intended?
+  - [ ] **MAJOR**: Bundle
 
 ## TODO
 
