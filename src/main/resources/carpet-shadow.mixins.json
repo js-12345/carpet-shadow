@@ -9,6 +9,7 @@
     "dropfix.PlayerInventoryDropMixin",
     "fragility.BrewingStandScreenHandler$PotionSlotMixin",
     "fragility.BrewingStandScreenHandlerMixin",
+    "fragility.CrafterInputSlotMixin",
     "fragility.DropperBlockMixin",
     "fragility.ForgingScreenHandlerMixin",
     "fragility.HopperBlockEntityMixin",
