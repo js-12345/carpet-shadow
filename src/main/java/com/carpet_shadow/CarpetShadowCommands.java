@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 
 public class CarpetShadowCommands {
 
@@ -35,6 +36,33 @@ public class CarpetShadowCommands {
 
                                     return 1;
                                 }
-                        ));
+                        )
+        );
+
+        registerCommand(
+                CommandManager.literal("carpetShadowItemCreate")
+                        .requires(ServerCommandSource::isExecutedByPlayer)
+                        .requires(source -> source.hasPermissionLevel(4))
+                        .executes(context -> {
+                                    ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+                                    PlayerInventory inv = player.getInventory();
+
+                                    ItemStack handStack = inv.getStack(inv.selectedSlot);
+                                    if (inv.getStack(PlayerInventory.OFF_HAND_SLOT).isEmpty()) {
+                                        ShadowItem sHandStack = ShadowItem.fromItemStack(handStack);
+
+                                        String shadowId = sHandStack.carpet_shadow$getShadowId();
+                                        if (shadowId == null)
+                                            shadowId = CarpetShadow.shadow_id_generator.nextString();
+
+                                        inv.setStack(PlayerInventory.OFF_HAND_SLOT, Globals.getByIdOrAdd(shadowId, handStack));
+                                    } else {
+                                        context.getSource().sendFeedback(() -> Text.literal("Offhand must be empty"), false);
+                                    }
+
+                                    return 1;
+                                }
+                        )
+        );
     }
 }
