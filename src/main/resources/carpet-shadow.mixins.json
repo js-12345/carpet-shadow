@@ -12,6 +12,7 @@
     "fragility.BrewingStandScreenHandlerMixin",
     "fragility.CrafterInputSlotMixin",
     "fragility.DropperBlockMixin",
+    "fragility.EnchantmentScreenHandlerMixin",
     "fragility.ForgingScreenHandlerMixin",
     "fragility.HopperBlockEntityMixin",
     "fragility.ItemEntityMixin",
