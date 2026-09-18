@@ -14,6 +14,8 @@
     "fragility.DropperBlockMixin",
     "fragility.EnchantmentScreenHandlerMixin",
     "fragility.ForgingScreenHandlerMixin",
+    "fragility.GrindstoneScreenHandler$2Mixin",
+    "fragility.GrindstoneScreenHandler$3Mixin",
     "fragility.HopperBlockEntityMixin",
     "fragility.ItemEntityMixin",
     "fragility.ItemScattererMixin",
