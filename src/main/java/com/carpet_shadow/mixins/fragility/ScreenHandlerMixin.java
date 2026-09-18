@@ -129,7 +129,7 @@ public abstract class ScreenHandlerMixin {
                 ItemStack ret = original.call(instance, player, index);
                 ShiftingItem.fromItemStack(mirror).carpet_shadow$setShiftMoving(false);
 
-                if (ret == ItemStack.EMPTY) {
+                if (ret == ItemStack.EMPTY && !player.getWorld().isClient()) {
                     og_item = Globals.getByIdOrAdd(sOg_item.carpet_shadow$getShadowId(), og_item);
                     og.setStack(og_item);
                     og_item.setCount(mirror.getCount());

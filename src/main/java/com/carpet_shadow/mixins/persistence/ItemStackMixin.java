@@ -24,6 +24,8 @@ public abstract class ItemStackMixin {
                 stack.setCount(0);
             } else if (CarpetShadowSettings.shadowItemMode.shouldLoadItem()) {
                 String shadow_id = nbt.getString("shadow");
+
+                // HOPEFULLY HARMLESS, IF NOT NEED TO BE SCOPED TO ONLY SERVER
                 stack = Globals.getByIdOrAdd(shadow_id, stack);
             }
         }

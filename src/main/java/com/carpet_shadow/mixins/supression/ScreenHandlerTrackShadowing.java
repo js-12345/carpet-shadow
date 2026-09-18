@@ -56,7 +56,8 @@ public abstract class ScreenHandlerTrackShadowing {
                 if (shadow_id == null)
                     shadow_id = CarpetShadow.shadow_id_generator.nextString();
 
-                Globals.getByIdOrAdd(shadow_id, shadow);
+                if (!player.getWorld().isClient())
+                    Globals.getByIdOrAdd(shadow_id, shadow);
 
                 if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK)
                     throw error;
