@@ -72,6 +72,7 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 ### Commands
 
 - ```/carpetShadowItemDelete``` to remove all loaded shadow items with the same id select it in hotbar and execute
+- ```/carpetShadowItemCreate``` to create a new shadow item from selected hotbar slot and puts it into offhand (has to be free)
 
 ## Known Bugs
 
@@ -80,16 +81,19 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 - [ ] **Persistence**
   - [ ] **MINOR**: when the mod generates a new shadow ID it only performs a check on the currently loaded IDs so there is a very small chance of overlapping IDs
   - [ ] **MINOR**: if two instances of a shadow item get unloaded with different amounts, the stack count will be of the first instance to get loaded back
-- [ ] **Fragility**
-  - [ ] **MAJOR**: opening creative inventory will unlink and duplicate all the shadow stacks in the current inventory
-- [ ] **Tooltips**
+- [x] **Tooltips**
   - [x] **MINOR**: on servers the tooltips are sent to the clients as LORE nbt tags; this mod will strip them down on the clientside but non modded clients will see some de-synced lores while performing item movements/splits in inventories (cant be fixed cause otherwise no tooltips on non carpet shadow clients)
-  - [ ] **MAJOR (Unconfirmed)**: non modded creative inventory might behave strangely if tooltips are active on server
-- [ ] **Unlinking/Duping**
-  - [ ] **MINOR**: on enchanting
+- [ ] **Unlinking/Duping/Vanishing**
+  - [x] **MINOR**: on enchanting
   - [x] **MINOR**: on renaming/anvil and smithing table (currently just disallowed)
   - [ ] **MAJOR**: on recipe book clicks and crafting ui, some stuff (unlinking) maybe intended?
   - [ ] **MAJOR**: Bundle
+  - [ ] **MINOR**: weird stuff on horse screen handler happening
+
+### Currently out of scope
+
+- opening creative inventory will unlink and duplicate all the shadow stacks in the current inventory (out of scope currently)
+- (Unconfirmed) non modded creative inventory might behave strangely if tooltips are active on server (out of scope currently)
 
 ## TODO
 
