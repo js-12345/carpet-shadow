@@ -20,6 +20,7 @@
     "fragility.ItemEntityMixin",
     "fragility.ItemScattererMixin",
     "fragility.ItemStackMixin",
+    "fragility.MerchantScreenHandlerMixin",
     "fragility.PlayerInventoryMixin",
     "fragility.ScreenHandlerMixin",
     "fragility.SlotMixin",
