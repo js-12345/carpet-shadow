@@ -122,7 +122,7 @@ public abstract class ScreenHandlerMixin {
 
             if (sOg_item.carpet_shadow$hasShadowId()) {
                 ItemStack mirror = og_item.copy();
-                ShadowItem.fromItemStack(mirror).carpet_shadow$setShadowId(sOg_item.carpet_shadow$getShadowId());
+                ShadowItem.fromItemStack(mirror).carpet_shadow$copyShadowId(sOg_item);
                 og.setStack(mirror);
 
                 ShiftingItem.fromItemStack(mirror).carpet_shadow$setShiftMoving(true);

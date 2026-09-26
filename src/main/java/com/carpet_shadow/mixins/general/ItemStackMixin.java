@@ -25,4 +25,14 @@ public class ItemStackMixin implements ShadowItem {
     public void carpet_shadow$setShadowId(String id) {
         shadow_id = id;
     }
+
+    @Override
+    public void carpet_shadow$removeShadowId() {
+        shadow_id = null;
+    }
+
+    @Override
+    public void carpet_shadow$copyShadowId(ShadowItem other) {
+        this.shadow_id = other.carpet_shadow$getShadowId();
+    }
 }

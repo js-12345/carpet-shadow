@@ -16,7 +16,7 @@ public interface ShadowItem {
 
         ShadowItem sStack = ShadowItem.fromItemStack(stack);
         ShadowItem sInstance = ShadowItem.fromItemStack(instance);
-        sStack.carpet_shadow$setShadowId(sInstance.carpet_shadow$getShadowId());
+        sStack.carpet_shadow$copyShadowId(sInstance);
 
         return stack;
     }
@@ -24,7 +24,7 @@ public interface ShadowItem {
     static ItemStack carpet_shadow$copy_supplier(ItemStack instance, ItemStack copy) {
         ShadowItem sCopy = ShadowItem.fromItemStack(copy);
         ShadowItem sInstance = ShadowItem.fromItemStack(instance);
-        sCopy.carpet_shadow$setShadowId(sInstance.carpet_shadow$getShadowId());
+        sCopy.carpet_shadow$copyShadowId(sInstance);
 
         return copy;
     }
@@ -32,4 +32,6 @@ public interface ShadowItem {
     boolean carpet_shadow$hasShadowId();
     String carpet_shadow$getShadowId();
     void carpet_shadow$setShadowId(String id);
+    void carpet_shadow$removeShadowId();
+    void carpet_shadow$copyShadowId(ShadowItem other);
 }

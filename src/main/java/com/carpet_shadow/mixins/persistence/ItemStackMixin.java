@@ -39,7 +39,7 @@ public abstract class ItemStackMixin {
         if (sThis.carpet_shadow$hasShadowId()) {
             if (this.isEmpty()) {
                 CarpetShadow.shadowMap.invalidate(sThis.carpet_shadow$getShadowId());
-                sThis.carpet_shadow$setShadowId(null);
+                sThis.carpet_shadow$removeShadowId();
             } else {
                 ret.putString("shadow", sThis.carpet_shadow$getShadowId());
             }
