@@ -4,6 +4,13 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 
 ## Carpet Settings
 
+- ```shadowItemCommand```
+
+  Enables/disables and set the permissions for the /shadowItem command:
+
+  Allowed options: `true`, `false`, `ops`, `0`, `1`, `2`, `3`, `4`
+
+
  - ```shadowItemMode```
 
     what should happen to shadow items when saved and re-loaded from disk:
@@ -71,8 +78,8 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 
 ### Commands
 
-- ```/carpetShadowItemDelete``` to remove all loaded shadow items with the same id select it in hotbar and execute
-- ```/carpetShadowItemCreate``` to create a new shadow item from selected hotbar slot and puts it into offhand (has to be free)
+- ```/shadowItem delete``` to remove all loaded shadow items with the same id select it in hotbar and execute
+- ```/shadowItem create``` to create a new shadow item from selected hotbar slot and puts it into offhand (has to be free)
 
 ## Known Bugs
 
