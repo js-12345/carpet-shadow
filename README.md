@@ -79,7 +79,11 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 ### Commands
 
 - ```/shadowItem delete``` to remove all loaded shadow items with the same id select it in hotbar and execute
+- ```/shadowItem delete <shadow_id>``` to remove all loaded shadow items with the shadow_id
 - ```/shadowItem create``` to create a new shadow item from selected hotbar slot and puts it into offhand (has to be free)
+- ```/shadowItem info``` to printout a list of all currently tracked shadow items
+- ```/shadowItem unlink``` to remove the shadow link of currently held item (keep remaining shadow items tracked)
+- ```/shadowItem get <shadow_id>``` to get a tracked shadow item into currently selected slot (needs to be empty) with specific shadow_id
 
 ## Known Bugs
 
