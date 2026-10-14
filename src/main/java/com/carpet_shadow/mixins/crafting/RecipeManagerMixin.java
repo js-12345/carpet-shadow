@@ -47,7 +47,7 @@ public class RecipeManagerMixin {
         Recipe<?> recipe = new BookCloningRecipe(CraftingRecipeCategory.MISC) {
             @Override
             public boolean matches(RecipeInputInventory inventory, World world) {
-                if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK || !CarpetShadowSettings.shadowCraftingGeneration)
+                if (!CarpetShadowSettings.shadowCraftingGeneration)
                     return false;
 
                 boolean hasEnderchest = false;
@@ -66,7 +66,7 @@ public class RecipeManagerMixin {
 
             @Override
             public ItemStack craft(RecipeInputInventory inventory, DynamicRegistryManager registryManager) {
-                if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK || !CarpetShadowSettings.shadowCraftingGeneration)
+                if (!CarpetShadowSettings.shadowCraftingGeneration)
                     return ItemStack.EMPTY;
 
                 ItemStack itemToShadow = null;
@@ -87,9 +87,7 @@ public class RecipeManagerMixin {
                 if (itemToShadow == null || enderchest == null)
                     return ItemStack.EMPTY;
 
-                ShadowItem sItemToShadow = ShadowItem.fromItemStack(itemToShadow);
-                String id = sItemToShadow.carpet_shadow$hasShadowId() ? sItemToShadow.carpet_shadow$getShadowId() : CarpetShadow.shadow_id_generator.nextString();
-                return Globals.getByIdOrAdd(id, itemToShadow);
+                return CarpetShadow.SHADOW_MAP.getOrAddShadowItem(itemToShadow);
             }
 
             @Override

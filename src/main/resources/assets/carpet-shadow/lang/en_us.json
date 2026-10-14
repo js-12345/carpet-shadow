@@ -5,10 +5,7 @@
   // Rules:
   "carpet.rule.shadowItemCommand.desc": "Enables and sets permissions to /shadowItem command",
 
-  "carpet.rule.shadowItemMode.desc": "Shadow Items Action over Unloading: ",
-  "carpet.rule.shadowItemMode.extra.0": "UNLINK -> default vanilla ( will also disable the mod )",
-  "carpet.rule.shadowItemMode.extra.1": "PERSIST -> shadow items will survive unloading",
-  "carpet.rule.shadowItemMode.extra.2": "VANISH -> shadow items will disappear if unloaded",
+  "carpet.rule.shadowTrackUntrackedItems.desc": "Tracks items that are not yet tracked because of version upgrade",
 
   "carpet.rule.shadowItemIdSize.desc": "Shadow Items Id Length",
 

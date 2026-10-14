@@ -11,12 +11,12 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
   Allowed options: `true`, `false`, `ops`, `0`, `1`, `2`, `3`, `4`
 
 
- - ```shadowItemMode```
+ - ```shadowTrackUntrackedItems```
 
-    what should happen to shadow items when saved and re-loaded from disk:
-    - ```UNLINK```    (vanilla default = dupe them)
-    - ```PERSIST```   (shadow items will re-link once re-load)
-    - ```VANISH```    (shadow items will disappear when re-load)
+    in a version change of this mod stuff got reworked, now every shadow item is always tracked on disk.
+    This option controls what should happen if old/legacy version if shadow items are found/to be loaded:
+    - ```TRUE``` to add them to the tracking
+    - ```FALSE``` to not add them (this would lead to a duplication of the item)
 
  - ```shadowItemIdSize```
 
@@ -85,9 +85,9 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 
 - [x] **General**
   - [x] **MINOR**: this mod only tracks shadow items that get generated with update suppression and the item swap operation, if another method of generating a shadow item is found this mod will not work. (That's the nature of this mod)
-- [ ] **Persistence**
-  - [ ] **MINOR**: when the mod generates a new shadow ID it only performs a check on the currently loaded IDs so there is a very small chance of overlapping IDs
-  - [ ] **MINOR**: if two instances of a shadow item get unloaded with different amounts, the stack count will be of the first instance to get loaded back
+- [x] **Persistence**
+  - [x] **MINOR**: when the mod generates a new shadow ID it only performs a check on the currently loaded IDs so there is a very small chance of overlapping IDs
+  - [x] **MINOR**: if two instances of a shadow item get unloaded with different amounts, the stack count will be of the first instance to get loaded back
 - [x] **Tooltips**
   - [x] **MINOR**: on servers the tooltips are sent to the clients as LORE nbt tags; this mod will strip them down on the clientside but non modded clients will see some de-synced lores while performing item movements/splits in inventories (cant be fixed cause otherwise no tooltips on non carpet shadow clients)
 - [ ] **Unlinking/Duping/Vanishing**
@@ -104,5 +104,5 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 
 ## TODO
 
-- add persistent saving/tracking of all shadow items (also ones that aren't loaded yet), track in creation and 'delete' from tracking on ```setCount(<=0)```
+- add metadata to shadow item loading???
 - check all screen handlers for problems/errors with shadow items

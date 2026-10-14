@@ -2,17 +2,15 @@ package com.carpet_shadow;
 
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
+import com.carpet_shadow.utility.CarpetShadowMap;
 import com.carpet_shadow.utility.RandomString;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -26,9 +24,12 @@ import java.util.Map;
 
 public class CarpetShadow implements CarpetExtension, ModInitializer {
 
-    public static final Cache<String, ItemStack> shadowMap = CacheBuilder.newBuilder().weakValues().build();
-    public static final Logger LOGGER = LogManager.getLogger("carpet-shadow");
     public static RandomString shadow_id_generator = new RandomString(CarpetShadowSettings.shadowItemIdSize);
+
+    public static final String MOD_ID = "carpet-shadow";
+
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static CarpetShadowMap SHADOW_MAP;
 
     @Override
     public void onGameStarted() {
@@ -40,22 +41,23 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
     @Override
     public void onInitialize() {
         CarpetServer.manageExtension(new CarpetShadow());
+
+        ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
+            SHADOW_MAP = CarpetShadowMap.loadShadowMapFromServer(server);
+        });
+
+        ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {
+            SHADOW_MAP = null;
+        });
+
+        ServerLifecycleEvents.BEFORE_SAVE.register((server, b1, b2) -> {
+            SHADOW_MAP.markDirty();
+        });
     }
 
     @Override
     public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess commandBuildContext) {
         ShadowItemCommand.register(dispatcher, commandBuildContext);
-    }
-
-    @Override
-    public void onServerLoaded(MinecraftServer server) {
-        shadowMap.invalidateAll();
-    }
-
-    @Override
-    public void onTick(MinecraftServer server) {
-        if (server.getTicks() % 1000 == 0)
-            CarpetShadow.shadowMap.cleanUp();
     }
 
     // TODO: change update suppression information with carpet-fixes on the fly?

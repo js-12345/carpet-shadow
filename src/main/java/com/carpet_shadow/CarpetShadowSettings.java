@@ -16,8 +16,9 @@ public class CarpetShadowSettings {
     @Rule(categories = {SHADOW, COMMAND}, validators = Validators.CommandLevel.class)
     public static String shadowItemCommand = "ops";
 
+    // TODO: remove in later versions
     @Rule(categories = {SHADOW, BUGFIX})
-    public static Mode shadowItemMode = Mode.UNLINK;
+    public static boolean shadowTrackUntrackedItems = true;
 
     @Rule(categories = {SHADOW}, validators = {IdSizeValidator.class})
     public static int shadowItemIdSize = 5;
@@ -58,28 +59,6 @@ public class CarpetShadowSettings {
             } catch (IllegalArgumentException ex) {
                 return changingRule.value();
             }
-        }
-    }
-
-    public enum Mode {
-        UNLINK(false, false),
-        PERSIST(true, false),
-        VANISH(true, true);
-
-        private final boolean shouldLoadItem;
-        private final boolean shouldResetCount;
-
-        public boolean shouldLoadItem() {
-            return shouldLoadItem;
-        }
-
-        public boolean shouldResetCount() {
-            return shouldResetCount;
-        }
-
-        Mode(boolean shouldLoadItem, boolean shouldResetCount) {
-            this.shouldLoadItem = shouldLoadItem;
-            this.shouldResetCount = shouldResetCount;
         }
     }
 }

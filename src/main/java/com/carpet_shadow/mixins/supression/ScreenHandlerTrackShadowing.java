@@ -1,9 +1,6 @@
 package com.carpet_shadow.mixins.supression;
 
 import com.carpet_shadow.CarpetShadow;
-import com.carpet_shadow.CarpetShadowSettings;
-import com.carpet_shadow.Globals;
-import com.carpet_shadow.interfaces.ShadowItem;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,9 +20,6 @@ public abstract class ScreenHandlerTrackShadowing {
 
     @Shadow
     public abstract ItemStack getCursorStack();
-
-    @Shadow
-    protected abstract boolean insertItem(ItemStack stack, int startIndex, int endIndex, boolean fromLast);
 
     @WrapOperation(
             method = "onSlotClick",
@@ -51,17 +45,8 @@ public abstract class ScreenHandlerTrackShadowing {
             else if (stack2 == stack3)
                 shadow = stack2;
 
-            if (shadow != null) {
-                String shadow_id = ShadowItem.fromItemStack(shadow).carpet_shadow$getShadowId();
-                if (shadow_id == null)
-                    shadow_id = CarpetShadow.shadow_id_generator.nextString();
-
-                if (!player.getWorld().isClient())
-                    Globals.getByIdOrAdd(shadow_id, shadow);
-
-                if (CarpetShadowSettings.shadowItemMode == CarpetShadowSettings.Mode.UNLINK)
-                    throw error;
-            }
+            if (shadow != null && !player.getWorld().isClient())
+                CarpetShadow.SHADOW_MAP.getOrAddShadowItem(shadow);
         }
     }
 }

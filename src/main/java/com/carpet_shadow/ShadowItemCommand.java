@@ -50,13 +50,7 @@ public class ShadowItemCommand {
             return 0;
         }
 
-        ShadowItem sHandStack = ShadowItem.fromItemStack(handStack);
-
-        String shadowId = sHandStack.carpet_shadow$getShadowId();
-        if (shadowId == null)
-            shadowId = CarpetShadow.shadow_id_generator.nextString();
-
-        inv.setStack(PlayerInventory.OFF_HAND_SLOT, Globals.getByIdOrAdd(shadowId, handStack));
+        inv.setStack(PlayerInventory.OFF_HAND_SLOT, CarpetShadow.SHADOW_MAP.getOrAddShadowItem(handStack));
 
         return 1;
     }

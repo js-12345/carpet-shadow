@@ -130,7 +130,7 @@ public abstract class ScreenHandlerMixin {
                 ShiftingItem.fromItemStack(mirror).carpet_shadow$setShiftMoving(false);
 
                 if (ret == ItemStack.EMPTY && !player.getWorld().isClient()) {
-                    og_item = Globals.getByIdOrAdd(sOg_item.carpet_shadow$getShadowId(), og_item);
+                    og_item = CarpetShadow.SHADOW_MAP.getOrAddShadowItem(og_item);
                     og.setStack(og_item);
                     og_item.setCount(mirror.getCount());
                 }
@@ -160,8 +160,7 @@ public abstract class ScreenHandlerMixin {
     public ItemStack fix_shift(ItemStack instance, int amount, Operation<ItemStack> original) {
         ShadowItem sInstance = ShadowItem.fromItemStack(instance);
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix && sInstance.carpet_shadow$hasShadowId()) {
-            String shadow_id = sInstance.carpet_shadow$getShadowId();
-            ItemStack og_item = Globals.getByIdOrNull(shadow_id);
+            ItemStack og_item = CarpetShadow.SHADOW_MAP.getShadowItem(sInstance.carpet_shadow$getShadowId());
             if (og_item != null) {
                 og_item.setCount(instance.getCount());
                 instance.setCount(0);
@@ -206,8 +205,8 @@ public abstract class ScreenHandlerMixin {
     public boolean fixQuickCraft(Slot slot, ItemStack stack, boolean allowOverflow, Operation<Boolean> original) {
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix) {
             ItemStack slotStack = slot.getStack();
-            ItemStack ref1 = Globals.getByIdOrNull(ShadowItem.fromItemStack(slotStack).carpet_shadow$getShadowId());
-            ItemStack ref2 = Globals.getByIdOrNull(ShadowItem.fromItemStack(stack).carpet_shadow$getShadowId());
+            ItemStack ref1 = CarpetShadow.SHADOW_MAP.getShadowItem(ShadowItem.fromItemStack(slotStack).carpet_shadow$getShadowId());
+            ItemStack ref2 = CarpetShadow.SHADOW_MAP.getShadowItem(ShadowItem.fromItemStack(stack).carpet_shadow$getShadowId());
             if (slotStack == ref1 || stack == ref2)
                 return false;
         }
