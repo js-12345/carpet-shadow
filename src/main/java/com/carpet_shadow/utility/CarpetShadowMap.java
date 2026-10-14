@@ -62,10 +62,9 @@ public class CarpetShadowMap extends PersistentState {
     }
 
     public synchronized ItemStack getOrAddShadowItem(ItemStack stack) {
-        String shadowId = ShadowItem.fromItemStack(stack).carpet_shadow$getShadowId();
-        if (!this.containsShadowItem(shadowId))
+        if (!this.containsShadowItem(stack))
             this.addShadowItem(stack);
-        return this.getShadowItem(shadowId);
+        return this.getShadowItem(ShadowItem.fromItemStack(stack).carpet_shadow$getShadowId());
     }
 
     public synchronized void deleteShadowItem(ItemStack stack) {
