@@ -3,7 +3,6 @@ package com.carpet_shadow;
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import com.carpet_shadow.utility.CarpetShadowMap;
-import com.carpet_shadow.utility.RandomString;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -24,8 +23,6 @@ import java.util.Map;
 
 public class CarpetShadow implements CarpetExtension, ModInitializer {
 
-    public static RandomString shadow_id_generator = new RandomString(CarpetShadowSettings.shadowItemIdSize);
-
     public static final String MOD_ID = "carpet-shadow";
 
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
@@ -34,7 +31,6 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
     @Override
     public void onGameStarted() {
         CarpetServer.settingsManager.parseSettingsClass(CarpetShadowSettings.class);
-        shadow_id_generator = new RandomString(CarpetShadowSettings.shadowItemIdSize);
         CarpetShadow.LOGGER.info("Carpet Shadow Loaded!");
     }
 

@@ -20,8 +20,8 @@ public class CarpetShadowSettings {
     @Rule(categories = {SHADOW, BUGFIX})
     public static boolean shadowTrackUntrackedItems = true;
 
-    @Rule(categories = {SHADOW}, validators = {IdSizeValidator.class})
-    public static int shadowItemIdSize = 5;
+    @Rule(categories = {SHADOW}, validators = IdSizeValidator.class)
+    public static int shadowItemIdSize = 10;
 
     @Rule(categories = {SHADOW, FEATURE})
     public static boolean shadowSuppressionGeneration = false;
@@ -53,12 +53,8 @@ public class CarpetShadowSettings {
     private static class IdSizeValidator extends Validator<Integer> {
         @Override
         public Integer validate(@Nullable ServerCommandSource source, CarpetRule<Integer> changingRule, Integer newValue, String userInput) {
-            try {
-                CarpetShadow.shadow_id_generator = new RandomString(newValue);
-                return newValue;
-            } catch (IllegalArgumentException ex) {
-                return changingRule.value();
-            }
+            int MIN_ID_SIZE = 4;
+            return newValue >= MIN_ID_SIZE ? newValue : changingRule.value();
         }
     }
 }

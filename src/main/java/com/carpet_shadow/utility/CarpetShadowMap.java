@@ -10,6 +10,7 @@ import net.minecraft.world.PersistentState;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class CarpetShadowMap extends PersistentState {
 
@@ -19,6 +20,12 @@ public class CarpetShadowMap extends PersistentState {
             CarpetShadowMap::fromNbt,
             null
     );
+
+    private static final String ALPHA_UP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String ALPHA_DOWN = ALPHA_UP.toLowerCase();
+    private static final String ALPHA = ALPHA_UP + ALPHA_DOWN;
+    private static final String DIGITS = "0123456789";
+    private static final String ALPHA_NUM = ALPHA + DIGITS;
 
     private final Map<String, ItemStack> shadowItemsMap;
 
@@ -83,11 +90,21 @@ public class CarpetShadowMap extends PersistentState {
         this.markDirty();
     }
 
-    public synchronized String generateUniqueId() {
-        String id = CarpetShadow.shadow_id_generator.nextString();
+    private String generateUniqueId() {
+        String id = generateId();
         while (this.containsShadowItem(id))
-            id = CarpetShadow.shadow_id_generator.nextString();
+            id = generateId();
         return id;
+    }
+
+    private static String generateId() {
+        StringBuilder idBuilder = new StringBuilder();
+        Random rand = new Random(); // TODO: add caching???
+
+        for (int i = 0; i < CarpetShadowSettings.shadowItemIdSize; i++)
+            idBuilder.append(ALPHA_NUM.charAt(rand.nextInt(ALPHA_NUM.length())));
+
+        return idBuilder.toString();
     }
 
     public synchronized int getSize() {
