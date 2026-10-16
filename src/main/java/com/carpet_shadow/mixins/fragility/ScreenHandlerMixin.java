@@ -213,4 +213,24 @@ public abstract class ScreenHandlerMixin {
 
         return original.call(slot, stack, allowOverflow);
     }
+
+    @WrapOperation(
+            method = "internalOnSlotClick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/screen/ScreenHandler;canInsertItemIntoSlot(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z"
+            ),
+            slice = @Slice(
+                    from = @At(
+                            value = "INVOKE",
+                            target = "Lnet/minecraft/util/collection/DefaultedList;get(I)Ljava/lang/Object;",
+                            ordinal = 7
+                    )
+            )
+    )
+    private boolean fixPickupAll(Slot slot, ItemStack stack, boolean allowOverflow, Operation<Boolean> original) {
+        if (CarpetShadowSettings.shadowItemInventoryFragilityFix && ShadowItem.fromItemStack(slot.getStack()).carpet_shadow$hasShadowId())
+            return false;
+        return original.call(slot, stack, allowOverflow);
+    }
 }
