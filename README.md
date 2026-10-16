@@ -40,7 +40,7 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
     
  - ```shadowItemUpdateFix```
 
-    inventory updates from shadow items will propagate to the other shadow item stacks even if in other invenotories
+    inventory updates from shadow items will propagate to the other shadow item stacks even if in other inventories
     
  - ```shadowItemPreventCombine```
 
@@ -93,7 +93,7 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
   - [x] **MINOR**: when the mod generates a new shadow ID it only performs a check on the currently loaded IDs so there is a very small chance of overlapping IDs
   - [x] **MINOR**: if two instances of a shadow item get unloaded with different amounts, the stack count will be of the first instance to get loaded back
 - [x] **Tooltips**
-  - [x] **MINOR**: on servers the tooltips are sent to the clients as LORE nbt tags; this mod will strip them down on the clientside but non modded clients will see some de-synced lores while performing item movements/splits in inventories (cant be fixed cause otherwise no tooltips on non carpet shadow clients)
+  - [x] **MINOR**: on servers the tooltips are sent to the clients as LORE nbt tags; this mod will strip them down on the clientside but non modded clients will see some de-synced lore while performing item movements/splits in inventories (cant be fixed cause otherwise no tooltips on non carpet shadow clients)
 - [ ] **Unlinking/Duping/Vanishing**
   - [x] **MINOR**: on enchanting
   - [x] **MINOR**: on renaming/anvil and smithing table (currently just disallowed)
