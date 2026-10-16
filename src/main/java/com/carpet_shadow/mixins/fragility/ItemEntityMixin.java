@@ -92,9 +92,7 @@ public abstract class ItemEntityMixin {
             method = "onPlayerCollision",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/entity/ItemEntity;getStack()Lnet/minecraft/item/ItemStack;",
-                    shift = At.Shift.BY,
-                    by = 2
+                    target = "Lnet/minecraft/item/ItemStack;getItem()Lnet/minecraft/item/Item;"
             )
     )
     public void setEntityForStack(PlayerEntity player, CallbackInfo ci, @Local(ordinal = 0) ItemStack stack) {
