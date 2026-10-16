@@ -4,7 +4,6 @@ import carpet.api.settings.CarpetRule;
 import carpet.api.settings.Rule;
 import carpet.api.settings.Validator;
 import carpet.api.settings.Validators;
-import com.carpet_shadow.utility.RandomString;
 import net.minecraft.server.command.ServerCommandSource;
 import org.jetbrains.annotations.Nullable;
 
