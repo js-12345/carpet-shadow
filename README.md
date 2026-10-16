@@ -98,7 +98,7 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
   - [x] **MINOR**: on enchanting
   - [x] **MINOR**: on renaming/anvil and smithing table (currently just disallowed)
   - [ ] **MAJOR**: on recipe book clicks and crafting ui, some stuff (unlinking) maybe intended?
-  - [ ] **MAJOR**: Bundle
+  - [x] **MAJOR**: Bundle
   - [ ] **MINOR**: weird stuff on horse screen handler happening
 
 ### Currently out of scope
