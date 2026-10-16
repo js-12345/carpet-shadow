@@ -67,6 +67,19 @@ public abstract class PlayerInventoryMixin {
             method = "insertStack(ILnet/minecraft/item/ItemStack;)Z",
             at = @At(
                     value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;setCount(I)V"
+            )
+    )
+    private void fixDeleteOfPickedUpItems(ItemStack instance, int count, Operation<Void> original) {
+        if ((CarpetShadowSettings.shadowItemInventoryFragilityFix || CarpetShadowSettings.shadowItemDropFix) && ShadowItem.fromItemStack(instance).carpet_shadow$hasShadowId() && count <= 0)
+            return;
+        original.call(instance, count);
+    }
+
+    @WrapOperation(
+            method = "insertStack(ILnet/minecraft/item/ItemStack;)Z",
+            at = @At(
+                    value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;copyAndEmpty()Lnet/minecraft/item/ItemStack;"
             ),
             slice = @Slice(
