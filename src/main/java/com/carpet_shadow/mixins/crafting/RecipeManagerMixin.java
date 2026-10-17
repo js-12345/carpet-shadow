@@ -2,8 +2,6 @@ package com.carpet_shadow.mixins.crafting;
 
 import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
-import com.carpet_shadow.Globals;
-import com.carpet_shadow.interfaces.ShadowItem;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
 import com.llamalad7.mixinextras.sugar.Local;
