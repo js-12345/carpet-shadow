@@ -25,7 +25,7 @@ public class RecipeManagerMixin {
                     target = "Lnet/minecraft/recipe/Recipe;matches(Lnet/minecraft/inventory/Inventory;Lnet/minecraft/world/World;)Z"
             )
     )
-    private static <C extends Inventory> boolean dissallowSameShadowItemMultipleTimes(Recipe<C> instance, C c, World world, Operation<Boolean> original) {
+    private static <C extends Inventory> boolean disallowSameShadowItemMultipleTimes(Recipe<C> instance, C c, World world, Operation<Boolean> original) {
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix) {
             List<String> shadowIds = new ArrayList<>(c.size());
             for (int i = 0; i < c.size(); ++i) {
