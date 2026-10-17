@@ -98,7 +98,7 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
   - [x] **MINOR**: on enchanting
   - [x] **MINOR**: on renaming/anvil and smithing table (currently just disallowed)
   - [x] **MAJOR**: on recipe book clicks (now a bit weird cause it always clears screen) 
-  - [ ] **MAJOR**: crafting ui, some stuff (unlinking) maybe intended?
+  - [x] **MAJOR**: crafting ui, only one shadow item with same id allowed in crafting
   - [x] **MAJOR**: Bundle
   - [ ] **MINOR**: weird stuff on horse screen handler happening
 
@@ -110,4 +110,3 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 ## TODO
 
 - add metadata to shadow item loading???
-- check all screen handlers for problems/errors with shadow items

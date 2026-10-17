@@ -24,6 +24,7 @@
     "fragility.ItemStackMixin",
     "fragility.MerchantScreenHandlerMixin",
     "fragility.PlayerInventoryMixin",
+    "fragility.RecipeManagerMixin",
     "fragility.ScreenHandlerMixin",
     "fragility.SlotMixin",
     "general.ItemStackMixin",
