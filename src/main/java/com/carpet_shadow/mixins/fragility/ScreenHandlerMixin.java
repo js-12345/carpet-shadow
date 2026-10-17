@@ -16,6 +16,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.ClickType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -23,6 +24,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ScreenHandler.class)
 public abstract class ScreenHandlerMixin {
+
+    @Unique
+    private boolean carpet_shadow$isServerSide = false;
 
     @Shadow
     public abstract ItemStack getCursorStack();
@@ -74,6 +78,16 @@ public abstract class ScreenHandlerMixin {
     @Inject(method = "internalOnSlotClick", at = @At("RETURN"))
     public void merging_end(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
         Globals.mergingThreads.remove(Thread.currentThread());
+    }
+
+    @Inject(method = "internalOnSlotClick", at = @At("HEAD"))
+    private void setScreenHandlerClientServerStatus(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
+        this.carpet_shadow$isServerSide = !player.getWorld().isClient();
+    }
+
+    @Inject(method = "internalOnSlotClick", at = @At("RETURN"))
+    private void resetScreenHandlerClientServerStatus(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
+        this.carpet_shadow$isServerSide = false;
     }
 
     @WrapOperation(
@@ -161,7 +175,7 @@ public abstract class ScreenHandlerMixin {
         ShadowItem sInstance = ShadowItem.fromItemStack(instance);
         if (CarpetShadowSettings.shadowItemInventoryFragilityFix && sInstance.carpet_shadow$hasShadowId()) {
             ItemStack og_item = CarpetShadow.SHADOW_MAP.getShadowItem(sInstance.carpet_shadow$getShadowId());
-            if (og_item != null) {
+            if (og_item != null && this.carpet_shadow$isServerSide) {
                 og_item.setCount(instance.getCount());
                 instance.setCount(0);
                 return og_item;

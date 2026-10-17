@@ -30,6 +30,7 @@ public abstract class ItemStackMixin {
         if (nbt.contains("shadow") || nbt.contains(ShadowItem.SHADOW_KEY)) {
             String shadow_id = nbt.getString(nbt.contains("shadow") ? "shadow" : ShadowItem.SHADOW_KEY);
 
+            // TODO: is this safe or only scope to server???
             if (CarpetShadow.SHADOW_MAP.containsShadowItem(shadow_id))
                 stack = CarpetShadow.SHADOW_MAP.getShadowItem(shadow_id);
             else if (CarpetShadowSettings.shadowTrackUntrackedItems) {
