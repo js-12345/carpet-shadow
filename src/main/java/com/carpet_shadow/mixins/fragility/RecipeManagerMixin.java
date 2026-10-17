@@ -1,6 +1,5 @@
 package com.carpet_shadow.mixins.fragility;
 
-import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.interfaces.ShadowItem;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
