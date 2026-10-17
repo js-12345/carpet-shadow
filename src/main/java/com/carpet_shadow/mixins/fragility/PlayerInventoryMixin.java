@@ -1,6 +1,7 @@
 package com.carpet_shadow.mixins.fragility;
 
 import com.carpet_shadow.CarpetShadowSettings;
+import com.carpet_shadow.interfaces.IndexOfIgnoreShadow;
 import com.carpet_shadow.interfaces.ItemEntitySlot;
 import com.carpet_shadow.interfaces.ShadowItem;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -12,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
@@ -19,7 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerInventory.class)
-public abstract class PlayerInventoryMixin {
+public abstract class PlayerInventoryMixin implements IndexOfIgnoreShadow {
+
+    @Unique
+    private boolean ignoreShadowItems = false;
 
     @Shadow
     public abstract void setStack(int slot, ItemStack stack);
@@ -36,6 +41,24 @@ public abstract class PlayerInventoryMixin {
     @Shadow
     @Final
     public PlayerEntity player;
+
+    @Override
+    public void carpet_shadow$ignoreShadowItems(boolean ignoreShadowItems) {
+        this.ignoreShadowItems = ignoreShadowItems;
+    }
+
+    @WrapOperation(
+            method = "indexOf",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;isEmpty()Z"
+            )
+    )
+    public boolean ignoreShadowItemsInIndexOf(ItemStack instance, Operation<Boolean> original) {
+        if (ignoreShadowItems && CarpetShadowSettings.shadowItemInventoryFragilityFix && ShadowItem.fromItemStack(instance).carpet_shadow$hasShadowId())
+            return true;
+        return original.call(instance);
+    }
 
     @Inject(
             method = "offer",

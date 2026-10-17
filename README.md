@@ -97,7 +97,8 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 - [ ] **Unlinking/Duping/Vanishing**
   - [x] **MINOR**: on enchanting
   - [x] **MINOR**: on renaming/anvil and smithing table (currently just disallowed)
-  - [ ] **MAJOR**: on recipe book clicks and crafting ui, some stuff (unlinking) maybe intended?
+  - [x] **MAJOR**: on recipe book clicks (now a bit weird cause it always clears screen) 
+  - [ ] **MAJOR**: crafting ui, some stuff (unlinking) maybe intended?
   - [x] **MAJOR**: Bundle
   - [ ] **MINOR**: weird stuff on horse screen handler happening
 

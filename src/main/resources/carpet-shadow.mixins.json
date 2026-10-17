@@ -18,6 +18,7 @@
     "fragility.GrindstoneScreenHandler$2Mixin",
     "fragility.GrindstoneScreenHandler$3Mixin",
     "fragility.HopperBlockEntityMixin",
+    "fragility.InputSlotFillerMixin",
     "fragility.ItemEntityMixin",
     "fragility.ItemScattererMixin",
     "fragility.ItemStackMixin",
