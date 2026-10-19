@@ -59,7 +59,13 @@ public class CarpetShadowMap extends PersistentState {
             shadowItemsMap.put(id, stack);
         } else if (CarpetShadowSettings.shadowTrackUntrackedItems) {
             // TODO: remove in later versions
-            shadowItemsMap.put(sStack.carpet_shadow$getShadowId(), stack);
+            String id = sStack.carpet_shadow$getShadowId();
+            if (!this.containsShadowItem(id)) {
+                shadowItemsMap.put(id, stack);
+            } else {
+                CarpetShadow.LOGGER.warn("Tried to add shadow item '{}' with id '{}', removing shadow id of this item", stack, id);
+                sStack.carpet_shadow$removeShadowId();
+            }
         }
         this.markDirty();
     }
