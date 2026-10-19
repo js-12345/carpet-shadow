@@ -2,6 +2,7 @@ package com.carpet_shadow.mixins.tooltip;
 
 import com.carpet_shadow.CarpetShadowSettings;
 import com.carpet_shadow.interfaces.ShadowItem;
+import com.carpet_shadow.utility.ShadowIdTooltipGenerator;
 import com.google.gson.JsonParseException;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -31,31 +32,30 @@ public abstract class PacketByteBufMixin {
     )
     public NbtCompound add_shadow_lore(ItemStack instance, Operation<NbtCompound> original) {
         NbtCompound ret = original.call(instance);
-        NbtCompound display = new NbtCompound();
 
         ShadowItem sInstance = ShadowItem.fromItemStack(instance);
-        if (CarpetShadowSettings.shadowItemTooltip && sInstance.carpet_shadow$hasShadowId()) {
-            MutableText text = MutableText.of(new PlainTextContent.Literal("shadow_id: "));
-            MutableText sub = MutableText.of(new PlainTextContent.Literal(sInstance.carpet_shadow$getShadowId()));
-
-            sub.formatted(Formatting.GOLD, Formatting.BOLD);
-            text.append(sub);
-            text.formatted(Formatting.ITALIC);
-
-            NbtList list = new NbtList();
-            if (ret == null) {
+        if(sInstance.carpet_shadow$hasShadowId()) {
+            if (ret == null)
                 ret = new NbtCompound();
-            } else if (ret.contains(ItemStack.DISPLAY_KEY)) {
-                display = ret.getCompound(ItemStack.DISPLAY_KEY);
-                if (display.contains(ItemStack.LORE_KEY))
-                    list = ret.getList(ItemStack.LORE_KEY, 8);
-            }
-
-            list.add(NbtString.of(Text.Serialization.toJsonString(text)));
-            display.put(ItemStack.LORE_KEY, list);
-            ret.put(ItemStack.DISPLAY_KEY, display);
 
             ret.putString(ShadowItem.SHADOW_KEY, sInstance.carpet_shadow$getShadowId());
+
+            if (CarpetShadowSettings.shadowItemTooltip) {
+                if (!ret.contains(ItemStack.DISPLAY_KEY))
+                    ret.put(ItemStack.DISPLAY_KEY, new NbtCompound());
+
+                NbtCompound displayTag = ret.getCompound(ItemStack.DISPLAY_KEY);
+                if (!displayTag.contains(ItemStack.LORE_KEY))
+                    displayTag.put(ItemStack.LORE_KEY, new NbtList());
+
+                NbtList loreTags = displayTag.getList(ItemStack.LORE_KEY, 8);
+
+                MutableText text = ShadowIdTooltipGenerator.generateTooltip(sInstance).formatted(Formatting.ITALIC);
+                loreTags.add(NbtString.of(Text.Serialization.toJsonString(text)));
+
+                displayTag.put(ItemStack.LORE_KEY, loreTags);
+                ret.put(ItemStack.DISPLAY_KEY, displayTag);
+            }
         }
 
         return ret;
