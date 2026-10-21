@@ -8,11 +8,11 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.PlainTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,7 +34,7 @@ public abstract class PacketByteBufMixin {
         NbtCompound ret = original.call(instance);
 
         ShadowItem sInstance = ShadowItem.fromItemStack(instance);
-        if(sInstance.carpet_shadow$hasShadowId()) {
+        if (sInstance.carpet_shadow$hasShadowId()) {
             if (ret == null)
                 ret = new NbtCompound();
 
@@ -48,7 +48,7 @@ public abstract class PacketByteBufMixin {
                 if (!displayTag.contains(ItemStack.LORE_KEY))
                     displayTag.put(ItemStack.LORE_KEY, new NbtList());
 
-                NbtList loreTags = displayTag.getList(ItemStack.LORE_KEY, 8);
+                NbtList loreTags = displayTag.getList(ItemStack.LORE_KEY, NbtElement.STRING_TYPE);
 
                 MutableText text = ShadowIdTooltipGenerator.generateTooltip(sInstance).formatted(Formatting.ITALIC);
                 loreTags.add(NbtString.of(Text.Serialization.toJsonString(text)));
@@ -66,41 +66,43 @@ public abstract class PacketByteBufMixin {
         ItemStack stack = cir.getReturnValue();
         ShadowItem sStack = ShadowItem.fromItemStack(stack);
 
-        String string;
-        MutableText mutableText2;
         NbtCompound nbt = stack.getNbt();
-        if (nbt != null && (nbt.contains(ItemStack.DISPLAY_KEY) || nbt.contains(ShadowItem.SHADOW_KEY))) {
-            String shadow_id = nbt.getString(ShadowItem.SHADOW_KEY);
-            if (!shadow_id.isEmpty()) {
-                sStack.carpet_shadow$setShadowId(shadow_id);
-                nbt.remove(ShadowItem.SHADOW_KEY);
-            }
+        if (nbt == null)
+            return;
 
-            NbtCompound display = nbt.getCompound(ItemStack.DISPLAY_KEY);
-            if (display.contains(ItemStack.LORE_KEY)) {
-                NbtList lore = display.getList(ItemStack.LORE_KEY, 8);
-                for (int i = 0; i < lore.size(); ++i) {
-                    string = lore.getString(i);
+        // extract shadow id
+        if (nbt.contains(ShadowItem.SHADOW_KEY)) {
+            sStack.carpet_shadow$setShadowId(nbt.getString(ShadowItem.SHADOW_KEY));
+            nbt.remove(ShadowItem.SHADOW_KEY);
+        }
+
+        // remove lore tags
+        if (nbt.contains(ItemStack.DISPLAY_KEY)) {
+            NbtCompound displayTag = nbt.getCompound(ItemStack.DISPLAY_KEY);
+            if (displayTag.contains(ItemStack.LORE_KEY)) {
+                NbtList loreTags = displayTag.getList(ItemStack.LORE_KEY, NbtElement.STRING_TYPE);
+
+                for (int i = 0; i < loreTags.size(); i++) {
                     try {
-                        mutableText2 = Text.Serialization.fromJson(string);
-                        if (mutableText2 != null && mutableText2.getContent() instanceof PlainTextContent.Literal && ((PlainTextContent.Literal) mutableText2.getContent()).string().equals("shadow_id: ")) {
-                            lore.remove(i);
-                            if (!sStack.carpet_shadow$hasShadowId())
-                                sStack.carpet_shadow$setShadowId(((PlainTextContent.Literal) mutableText2.getSiblings().get(0).getContent()).string());
-                            break;
+                        MutableText singleLoreText = Text.Serialization.fromJson(loreTags.getString(i));
+                        if (ShadowIdTooltipGenerator.isShadowIdTooltip(singleLoreText)) {
+                            loreTags.remove(i);
+                            i--;
                         }
                     } catch (JsonParseException ignored) {
                     }
                 }
 
-                if (lore.isEmpty())
-                    display.remove(ItemStack.LORE_KEY);
-                if (display.isEmpty())
-                    nbt.remove(ItemStack.DISPLAY_KEY);
+                if (loreTags.isEmpty())
+                    displayTag.remove(ItemStack.LORE_KEY);
             }
 
-            if (nbt.isEmpty())
-                stack.setNbt(null);
+            if (displayTag.isEmpty())
+                nbt.remove(ItemStack.DISPLAY_KEY);
         }
+
+        // if nbt now empty, remove
+        if (nbt.isEmpty())
+            stack.setNbt(null);
     }
 }
