@@ -2,8 +2,8 @@ package com.carpet_shadow.mixins.inv_updates;
 
 
 import com.carpet_shadow.CarpetShadowSettings;
-import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.InventoryItem;
+import com.carpet_shadow.utility.ShadowInvUpdates;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -41,8 +41,7 @@ public abstract class ItemStackMixin implements InventoryItem {
 
     @Inject(method = "setCount", at = @At("RETURN"))
     public void propagate_update(int count, CallbackInfo ci) {
-        if (CarpetShadowSettings.shadowItemUpdateFix) {
-            Globals.toUpdate.addAll(carpet_shadow$getInventories());
-        }
+        if (CarpetShadowSettings.shadowItemUpdateFix)
+            ShadowInvUpdates.addInventories(carpet_shadow$getInventories());
     }
 }

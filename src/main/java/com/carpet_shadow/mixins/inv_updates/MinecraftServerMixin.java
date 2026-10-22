@@ -2,7 +2,7 @@ package com.carpet_shadow.mixins.inv_updates;
 
 import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
-import com.carpet_shadow.Globals;
+import com.carpet_shadow.utility.ShadowInvUpdates;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,20 +24,16 @@ public abstract class MinecraftServerMixin {
             )
     )
     public void afterWorldTick(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        try {
-            if (CarpetShadowSettings.shadowItemUpdateFix) {
-                for (Inventory inv : Globals.toUpdate) {
-                    try {
-                        inv.markDirty();
-                    } catch (Throwable ex) {
-                        CarpetShadow.LOGGER.error("Caught Exception while propagating shadow stack updates: ", ex);
-                    }
+        if (CarpetShadowSettings.shadowItemUpdateFix) {
+            for (Inventory inv : ShadowInvUpdates.getInventories()) {
+                try {
+                    inv.markDirty();
+                } catch (Throwable ex) {
+                    CarpetShadow.LOGGER.error("Caught Exception while propagating shadow stack updates: ", ex);
                 }
             }
-        } catch (Throwable error) {
-            CarpetShadow.LOGGER.error("Caught Exception while propagating shadow stack updates: ", error);
-        } finally {
-            Globals.toUpdate.clear();
         }
+
+        ShadowInvUpdates.clear();
     }
 }
