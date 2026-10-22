@@ -3,6 +3,7 @@ package com.carpet_shadow;
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import com.carpet_shadow.utility.CarpetShadowMap;
+import com.carpet_shadow.utility.ShadowStackMerger;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -44,6 +45,7 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
 
         ServerLifecycleEvents.SERVER_STOPPED.register((server) -> {
             SHADOW_MAP = null;
+            ShadowStackMerger.clear();
         });
 
         ServerLifecycleEvents.BEFORE_SAVE.register((server, b1, b2) -> {

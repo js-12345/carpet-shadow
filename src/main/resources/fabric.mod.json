@@ -31,6 +31,9 @@
     "main": [
       "com.carpet_shadow.CarpetShadow"
     ],
+    "client": [
+      "com.carpet_shadow.ClientCarpetShadowInitializer"
+    ],
     "preLaunch": [
       "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
     ]
