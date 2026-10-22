@@ -1,9 +1,9 @@
 package com.carpet_shadow.mixins.fragility;
 
 import com.carpet_shadow.CarpetShadowSettings;
-import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.ItemEntitySlot;
 import com.carpet_shadow.interfaces.ShadowItem;
+import com.carpet_shadow.utility.ShadowStackMerger;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -82,9 +82,9 @@ public abstract class ItemEntityMixin {
             at = @At("RETURN")
     )
     private static boolean canMerge(boolean original, ItemStack stack1, ItemStack stack2) {
-        Globals.mergingThreads.add(Thread.currentThread());
-        boolean ret = Globals.shadow_merge_check(stack1, stack2, original);
-        Globals.mergingThreads.remove(Thread.currentThread());
+        ShadowStackMerger.addCurrentThread();
+        boolean ret = ShadowStackMerger.check(stack1, stack2, original);
+        ShadowStackMerger.removeCurrentThread();
         return ret;
     }
 
@@ -106,11 +106,11 @@ public abstract class ItemEntityMixin {
 
     @Inject(method = "onPlayerCollision", at = @At("HEAD"))
     private void merging_start(PlayerEntity player, CallbackInfo ci) {
-        Globals.mergingThreads.add(Thread.currentThread());
+        ShadowStackMerger.addCurrentThread();
     }
 
     @Inject(method = "onPlayerCollision", at = @At("RETURN"))
     private void merging_end(PlayerEntity player, CallbackInfo ci) {
-        Globals.mergingThreads.remove(Thread.currentThread());
+        ShadowStackMerger.removeCurrentThread();
     }
 }

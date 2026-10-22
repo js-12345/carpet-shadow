@@ -2,9 +2,9 @@ package com.carpet_shadow.mixins.fragility;
 
 import com.carpet_shadow.CarpetShadow;
 import com.carpet_shadow.CarpetShadowSettings;
-import com.carpet_shadow.Globals;
 import com.carpet_shadow.interfaces.ShadowItem;
 import com.carpet_shadow.interfaces.ShiftingItem;
+import com.carpet_shadow.utility.ShadowStackMerger;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -72,12 +72,12 @@ public abstract class ScreenHandlerMixin {
 
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"))
     public void merging_start(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        Globals.mergingThreads.add(Thread.currentThread());
+        ShadowStackMerger.addCurrentThread();
     }
 
     @Inject(method = "internalOnSlotClick", at = @At("RETURN"))
     public void merging_end(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
-        Globals.mergingThreads.remove(Thread.currentThread());
+        ShadowStackMerger.removeCurrentThread();
     }
 
     @Inject(method = "internalOnSlotClick", at = @At("HEAD"))
