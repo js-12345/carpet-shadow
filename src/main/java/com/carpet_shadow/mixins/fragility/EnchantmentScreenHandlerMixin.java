@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(EnchantmentScreenHandler.class)
 public class EnchantmentScreenHandlerMixin {
 
-    // TODO: also prevent direct click??? Currently doesnt create bugs
-
     @WrapOperation(
             method = "quickMove",
             at = @At(

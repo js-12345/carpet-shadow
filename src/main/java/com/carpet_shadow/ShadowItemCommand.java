@@ -43,8 +43,7 @@ public class ShadowItemCommand {
         }
 
         ItemStack cpy = s.copy();
-        // TODO: use delete???
-        s.setCount(0);
+        CarpetShadow.SHADOW_MAP.deleteShadowItem(s);
         inv.setStack(selectedSlot, cpy);
 
         return 1;
@@ -60,8 +59,7 @@ public class ShadowItemCommand {
             return 0;
         }
 
-        // TODO: use delete???
-        CarpetShadow.SHADOW_MAP.getShadowItem(shadowId).setCount(0);
+        CarpetShadow.SHADOW_MAP.deleteShadowItem(CarpetShadow.SHADOW_MAP.getShadowItem(shadowId));
         return 1;
     }
 

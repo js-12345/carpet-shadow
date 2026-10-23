@@ -26,8 +26,6 @@ import java.util.Map;
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
 
-    // TODO: a lot of duplication glitches with crafting table, e.g. 9x9, recipe book click
-
     @Inject(
             method = "apply(Ljava/util/Map;Lnet/minecraft/resource/ResourceManager;Lnet/minecraft/util/profiler/Profiler;)V",
             at = @At(

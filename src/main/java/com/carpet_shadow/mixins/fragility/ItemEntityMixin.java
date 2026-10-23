@@ -41,8 +41,7 @@ public abstract class ItemEntityMixin {
             ItemStack itemStack = iThis.getStack();
             ItemStack itemStack2 = other.getStack();
 
-            // TODO: fix owner check
-            if (Objects.equals(owner, owner) && ItemEntity.canMerge(itemStack, itemStack2)) {
+            if (ItemEntity.canMerge(itemStack, itemStack2)) {
                 ShadowItem sItem1 = ShadowItem.fromItemStack(itemStack);
                 ShadowItem sItem2 = ShadowItem.fromItemStack(itemStack2);
 

@@ -110,3 +110,4 @@ Carpet extension to fix various inconsistencies (/bugs) related to shadow item s
 ## TODO
 
 - add metadata to shadow item loading???
+- add back functionality (e.g. item dragging, shadow items in screen handlers) that are currently disallowed for fragility reasons

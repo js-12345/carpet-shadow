@@ -31,8 +31,6 @@ public abstract class ScreenHandlerMixin {
     @Shadow
     public abstract ItemStack getCursorStack();
 
-    // TODO: click item dragging not working: currently intended
-
     @WrapOperation(
             method = "checkCursorStackUpdates",
             at = @At(
