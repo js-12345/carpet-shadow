@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.mojang.brigadier.CommandDispatcher;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.ServerCommandSource;
 import org.apache.commons.io.IOUtils;
@@ -58,21 +59,31 @@ public class CarpetShadow implements CarpetExtension, ModInitializer {
         ShadowItemCommand.register(dispatcher, commandBuildContext);
     }
 
-    // TODO: change update suppression information with carpet-fixes on the fly?
     @Override
     public Map<String, String> canHasTranslations(String lang) {
         InputStream langFile = getClass().getClassLoader().getResourceAsStream("assets/carpet-shadow/lang/%s.json".formatted(lang));
-        if (langFile == null) {
+        if (langFile == null)
             return Collections.emptyMap();
-        }
+
         String jsonData;
         try {
             jsonData = IOUtils.toString(langFile, StandardCharsets.UTF_8);
         } catch (IOException e) {
             return Collections.emptyMap();
         }
+
         Gson gson = new GsonBuilder().setLenient().create();
-        return gson.fromJson(jsonData, new TypeToken<Map<String, String>>() {
-        }.getType());
+        Map<String, String> translationMap = gson.fromJson(jsonData, new TypeToken<Map<String, String>>() {}.getType());
+
+        // dynamically change rule description if carpet-fixes is installed
+        final String keyExtra2 = "carpet.rule.shadowSuppressionGeneration.extra.2";
+        final String keyExtra2CarpetFixes = "carpet.rule.shadowSuppressionGeneration.extra.2.carpetFixes";
+
+        if (FabricLoader.getInstance().isModLoaded("carpet-fixes"))
+           translationMap.put(keyExtra2, translationMap.get(keyExtra2CarpetFixes));
+
+        translationMap.remove(keyExtra2CarpetFixes);
+
+        return translationMap;
     }
 }
